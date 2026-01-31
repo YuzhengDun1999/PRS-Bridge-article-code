@@ -1,3 +1,10 @@
+### GA controls the genetic architecture.
+### GA=1: strong negative selection, common SNPs heritability fixed as 0.4 for each of the five ancestries, cross-ancestry genetic architecture as 0.8.
+### GA=4: no negative selection, common SNPs heritability fixed as 0.4 for each of the five ancestries, cross-ancestry genetic architecture as 0.8.
+### GA=5: mild negative selection, common SNPs heritability fixed as 0.4 for each of the five ancestries, cross-ancestry genetic architecture as 0.8.
+
+###rho controls causal SNPs proportion. rho is set to be 1, 2, 3 with the causal SNPs proportions as 0.01, 0.001, 0.0005.
+
 cal_R2 = function(dat){
   model = lm(y ~ PRS, data = dat)
   return(summary(model)$r.squared)
@@ -6,8 +13,9 @@ cal_R2 = function(dat){
 temp <- commandArgs(TRUE)
 rho = as.numeric(temp[1])
 GA = as.numeric(temp[2])
-size = 4
-rep = 1
+
+size = 4 ######## Sample size 100,000
+rep = 1 ########First replication
 
 library('dplyr')
 args = commandArgs(trailingOnly = TRUE)
@@ -20,7 +28,7 @@ names(result) = c("seed", "tune_i", "tuning_R2", "validation_R2"); result_i = 1
 PRS_list_tuning = lapply(1:22, function(chr) {
   file_path <- bigreadr::fread2(paste0(result_dir, '/chr', chr, "/tuning_prs.txt"))
 })
-cov = bigreadr::fread2(paste0('/dcl01/chatterj/data/hzhang1/multi_ethnic/LD_simulation_new/EUR/pheno_summary_out_GA/phenotypes_rho', rho, '_',GA, '.phen'))
+cov = bigreadr::fread2(paste0('/dcl01/chatterj/data/hzhang1/multi_ethnic/LD_simulation_new/EUR/pheno_summary_out_GA/EUR_phen_rho_', rho, '_GA_',GA))
 cov = cov[, c(1,3)]; names(cov) = c("IID", "y")
 cov = cov %>% filter(IID %in% PRS_list_tuning[[1]][,1])
 for (x in 1:80) {
@@ -36,7 +44,6 @@ for (x in 1:80) {
     result[result_i,] = c(seed, x, summary(lm(y~PRS, data = tuning))$r.squared, summary(lm(y~PRS, data = validation))$r.squared); result_i = result_i + 1
   }
 }
-#readr::write_tsv(result, paste0("/dcs04/nilanjan/data/ydun/SinglePRS/", trait, "/result/", method, '_', N,'_all_result.txt'))
 
 result_validation = data.frame(matrix(ncol = 3, nrow = 0))
 names(result_validation) = c("seed", "tune_i", "validation_R2"); result_validation_i = 1
@@ -60,7 +67,7 @@ result_dir = paste0("/dcs04/nilanjan/data/ydun/PRS_Bridge/simulation/result_proj
 result = data.frame(matrix(ncol = 5, nrow = 0))
 names(result) = c("seed", "alpha", "percent", "tuning_R2", "validation_R2"); result_i = 1
 
-cov = bigreadr::fread2(paste0('/dcl01/chatterj/data/hzhang1/multi_ethnic/LD_simulation_new/EUR/pheno_summary_out_GA/phenotypes_rho', rho, '_',GA, '.phen'))
+cov = bigreadr::fread2(paste0('/dcl01/chatterj/data/hzhang1/multi_ethnic/LD_simulation_new/EUR/pheno_summary_out_GA/EUR_phen_rho_', rho, '_GA_',GA))
 cov = cov[, c(1,3)]; names(cov) = c("IID", "y")
 for (alpha in alpha_list) {
   for (percent in percent_list) {
@@ -77,7 +84,6 @@ for (alpha in alpha_list) {
     }
   }
 }
-#readr::write_tsv(result, paste0("/dcs04/nilanjan/data/ydun/SinglePRS/", trait, "/result/", method, '_', ref,'_all_result.txt'))
 readr::write_tsv(result, paste0("/dcs04/nilanjan/data/ydun/PRS_Bridge/simulation/result/", method, "-rho", rho, '-size', size, '-rep', rep, '-GA', GA, '_all_result_std.txt'))
 
 result_validation = data.frame(matrix(ncol = 4, nrow = 0))
@@ -97,7 +103,7 @@ readr::write_tsv(data.frame(alpha_best = alpha_best[1,1], R2 = mean(result_valid
 method = "ldpred2"
 result = data.frame(matrix(ncol = 4, nrow = 0))
 names(result) = c("seed", "tune_i", "tuning_R2", "validation_R2"); result_i = 1
-cov = bigreadr::fread2(paste0('/dcl01/chatterj/data/hzhang1/multi_ethnic/LD_simulation_new/EUR/pheno_summary_out_GA/phenotypes_rho', rho, '_',GA, '.phen'))
+cov = bigreadr::fread2(paste0('/dcl01/chatterj/data/hzhang1/multi_ethnic/LD_simulation_new/EUR/pheno_summary_out_GA/EUR_phen_rho_', rho, '_GA_',GA))
 cov = cov[, c(1,3)]; names(cov) = c("IID", "y")
 
 for (x in 1:63) {
@@ -133,7 +139,7 @@ method = "PRScs"
 
 result = data.frame(matrix(ncol = 4, nrow = 0))
 names(result) = c("seed", "phi", "tuning_R2", "validation_R2"); result_i = 1
-cov = bigreadr::fread2(paste0('/dcl01/chatterj/data/hzhang1/multi_ethnic/LD_simulation_new/EUR/pheno_summary_out_GA/phenotypes_rho', rho, '_',GA, '.phen'))
+cov = bigreadr::fread2(paste0('/dcl01/chatterj/data/hzhang1/multi_ethnic/LD_simulation_new/EUR/pheno_summary_out_GA/EUR_phen_rho_', rho, '_GA_',GA))
 cov = cov[, c(1,3)]; names(cov) = c("IID", "y")
 
 for (phi_i in 1:length(phi_list)){  

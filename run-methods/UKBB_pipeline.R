@@ -21,22 +21,16 @@ system(paste0("cp /dcs04/nilanjan/data/ydun/PRS_Bridge/BC_new/ukbb/run_sh_prior/
 library(dplyr)
 sumdat = bigreadr::fread2(paste0('/dcs04/nilanjan/data/ydun/GWAS_ukbb/', trait, '/sumdat_Rcov.txt'))
 ldsc_sumdat_all_hm3 = data.frame()
-ldsc_sumdat_all_mega = data.frame()
 for (chr in 1:22) {
   ref_dir = paste0('/dcs04/nilanjan/data/ydun/PRS_Bridge/ref_ukbb/chr', chr, '/')
   out_dir = paste0('/dcs04/nilanjan/data/ydun/SinglePRS/', trait, '/data/chr', chr, '/')
-  sumdat_mega = sumdat[sumdat$CHR == chr, ]
-  sumdat_mega = sumdat_mega %>% filter(((BETA/SE)^2/N <= 80)) %>%
+  sumdat_hm3 = sumdat[sumdat$CHR == chr, ]
+  sumdat_hm3 = sumdat_hm3 %>% filter(((BETA/SE)^2/N <= 80)) %>%
     select(CHR, POS, SNP_ID, REF, ALT, REF_FRQ, PVAL, BETA, SE, N) %>%
     filter((REF_FRQ>0.01) & (REF_FRQ<0.99)) %>% filter(!(CHR==6 & POS>26e6 & POS<34e6))#hg37
-  sumdat_mega$PVAL = as.numeric(sumdat_mega$PVAL)
-  ref = bigreadr::fread2(paste0(ref_dir, 'chr_', chr, '_merged.bim'))
-  sumdat_ldsc = sumdat_mega %>% select(SNP_ID, REF, ALT, N, PVAL, BETA) %>% 
+  sumdat_hm3$PVAL = as.numeric(sumdat_hm3$PVAL)
+  sumdat_ldsc = sumdat_hm3 %>% select(SNP_ID, REF, ALT, N, PVAL, BETA) %>% 
     rename(snpid=SNP_ID, a1=REF, a2=ALT, PVAL=PVAL, beta=BETA)
-  ldsc_sumdat_all_mega = rbind(ldsc_sumdat_all_mega, sumdat_ldsc)
-  
-  sumdat_hm3 = sumdat_mega %>% filter(SNP_ID %in% ref[,2])
-  
   bigreadr::fwrite2(sumdat_hm3 %>% select(SNP_ID, REF, ALT, BETA, SE, N), paste0(out_dir, '/hm3_sumdat.txt'), quote = FALSE, sep = "\t", row.names = FALSE)
   sumdat_ldsc = sumdat_hm3 %>% select(SNP_ID, REF, ALT, N, PVAL, BETA) %>% 
     rename(snpid=SNP_ID, a1=REF, a2=ALT, PVAL=PVAL, beta=BETA)
@@ -51,6 +45,8 @@ bigreadr::fwrite2(ldsc_sumdat_all_hm3, paste0(out_dir1, '/ldsc-hm3.txt'), quote 
 
 
 ################## ldsc using UKBB ref ################
+########### Please see the tutorial on https://github.com/bulik/ldsc to run ldsc and download LD scores
+########### If ldsc cannot be run, h2 and h2_se can be directly set to 0.
 sink(paste0('/dcs04/nilanjan/data/ydun/SinglePRS/', trait, '/data/get_h2.sh'))
 cat('module load conda_R',"\n")
 cat('source activate ldsc',"\n")

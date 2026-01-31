@@ -27,6 +27,7 @@ This is the viable code for the PRS-Bridge paper.
  - LASSOSUM_disease.R: generate script files for running Lassosum for disease traits.
  - LASSOSUM.R: generate script files for running Lassosum for continuous traits in UK Biobank.
  - UKBB_pipeline.R: generate script files for running LDpred2, PRS-CS, and PRS-Bridge for continuous traits in UK Biobank.
+ - process_disease_sumdat.R: preprocess disease summary statistics downloaded from website.
 
  ### run-simulation
  - evaluation.R: evaluation of each methods in simulation studies. 
@@ -42,3 +43,4 @@ This is the viable code for the PRS-Bridge paper.
  ### data
  - PRScs_sumdat.txt: data for reproducing Figure 1.
  - chr22.bim: data for reproducing Figure 1.
+ - sumdat_Rcov.txt: Example of summary statistics for running pipeline.

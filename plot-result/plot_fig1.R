@@ -44,6 +44,6 @@ plot2 = ggplot(data = dat %>% filter(iter <= 700)) + geom_point(mapping = aes(x 
   scale_y_continuous(trans = 'log10', limits = y_range, labels = scales::trans_format('log10', scales::math_format(10^.x))) + scale_color_manual(values = c("#00AFBB", "#E7B800", "#FC4E07"))+
   guides(color = guide_legend(override.aes = list(size = 6)))
 plot_all = ggarrange(plot1, plot2 + rremove("ylab"), ncol=2, nrow=1, common.legend = TRUE, legend="bottom")
-ggsave("~/Documents/PRS_Bridge/prs-bridge-manuscript/JASA_application/PRScs_traceplot_seed.pdf", plot_all, width = 12, height = 6)
+ggsave("PRScs_traceplot_seed.pdf", plot_all, width = 12, height = 6)
 
 

@@ -3,34 +3,20 @@ args = commandArgs(trailingOnly = TRUE)
 trait = args[1]
 trait = "IBD"
 
-dat = bigreadr::fread2("/dcs04/nilanjan/data/ydun/PRS_Bridge/RA/GWAS/RA_GWASmeta_European_v2.txt.gz")
-names(dat) = c("SNP", "CHR", "BP", "A1", "A2", "OR", "CI_low", "CI_up", "P")
-##No REF freq, did not remove any SNPs
-sumdat_raw = dat %>% mutate(BETA = log(OR)) %>% mutate(N = 43290) %>%
-  mutate(SE = (log(CI_up) - log(CI_low)) / 2 / 1.96) %>% mutate(FRQ = 0.1) %>%
-  select(CHR, BP, SNP, A1, A2, FRQ, P, BETA, SE, N)
-names(sumdat_raw) = c("CHR","POS","SNP_ID","REF","ALT","REF_FRQ","PVAL","BETA","SE","N")
-sumdat = sumdat_raw
-################### preprocess summary level data of UKBB ################
+################### preprocess summary level ################
 library(dplyr)
 # sumdat = bigreadr::fread2(paste0('/dcs04/nilanjan/data/ydun/PRS_Bridge/', trait, '/GWAS/sumdat_Rcov.txt'))
 sumdat = sumdat %>% mutate(N = round(N))
 ldsc_sumdat_all_hm3 = data.frame()
-ldsc_sumdat_all_mega = data.frame()
 for (chr in 1:22) {
-  ref_dir = paste0('/dcs04/nilanjan/data/ydun/PRS_Bridge/ref_ukbb/chr', chr, '/')
   out_dir = paste0('/dcs04/nilanjan/data/ydun/PRS_Bridge/', trait, '/data_Rcov/chr', chr, '/')
-  sumdat_mega = sumdat[sumdat$CHR == chr, ]
-  sumdat_mega = sumdat_mega %>% filter(((BETA/SE)^2/N <= 80)) %>%
+  sumdat_hm3 = sumdat[sumdat$CHR == chr, ]
+  sumdat_hm3 = sumdat_hm3 %>% filter(((BETA/SE)^2/N <= 80)) %>%
     select(CHR, POS, SNP_ID, REF, ALT, REF_FRQ, PVAL, BETA, SE, N) %>%
     filter((REF_FRQ>0.01) & (REF_FRQ<0.99)) %>% filter(!(CHR==6 & POS>26e6 & POS<34e6))#hg37
-  sumdat_mega$PVAL = as.numeric(sumdat_mega$PVAL)
-  ref = bigreadr::fread2(paste0(ref_dir, 'chr_', chr, '_merged.bim'))
-  sumdat_ldsc = sumdat_mega %>% select(SNP_ID, REF, ALT, N, PVAL, BETA) %>% 
+  sumdat_hm3$PVAL = as.numeric(sumdat_hm3$PVAL)
+  sumdat_ldsc = sumdat_hm3 %>% select(SNP_ID, REF, ALT, N, PVAL, BETA) %>% 
     rename(snpid=SNP_ID, a1=REF, a2=ALT, PVAL=PVAL, beta=BETA)
-  ldsc_sumdat_all_mega = rbind(ldsc_sumdat_all_mega, sumdat_ldsc)
-  
-  sumdat_hm3 = sumdat_mega %>% filter(SNP_ID %in% ref[,2])
   
   bigreadr::fwrite2(sumdat_hm3 %>% select(SNP_ID, REF, ALT, BETA, SE, N), paste0(out_dir, '/hm3_sumdat.txt'), quote = FALSE, sep = "\t", row.names = FALSE)
   sumdat_ldsc = sumdat_hm3 %>% select(SNP_ID, REF, ALT, N, PVAL, BETA) %>% 
