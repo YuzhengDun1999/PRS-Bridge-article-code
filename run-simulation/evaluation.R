@@ -5,9 +5,7 @@ cal_R2 = function(dat){
 ####### lassosum
 temp <- commandArgs(TRUE)
 rho = as.numeric(temp[1])
-#size = as.numeric(temp[4])
 GA = as.numeric(temp[2])
-#rep = as.numeric(temp[6])
 size = 4
 rep = 1
 
