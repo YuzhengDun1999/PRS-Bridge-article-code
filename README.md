@@ -39,6 +39,6 @@ This is the viable code for the PRS-Bridge paper.
  - PRScs_noconverge.py: Remove the ad hoc method implemented in the original PRScs.py 
  - PRScs_proj.R: Extends the original PRS-CS framework by incorporating our proposed projected summary statistics approach.
 
- ### PRS-CS-proj
- -PRScs_sumdat.txt: data for reproducing Figure 1.
- -chr22.bim: data for reproducing Figure 1.
+ ### data
+ - PRScs_sumdat.txt: data for reproducing Figure 1.
+ - chr22.bim: data for reproducing Figure 1.
