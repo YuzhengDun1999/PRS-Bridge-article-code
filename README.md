@@ -20,6 +20,7 @@ This is the viable code for the PRS-Bridge paper.
  - plot_auto.R: visualize the results of PRS-Bridge-auto in Figure S8 and S9. 
  - plot_RE.R: visualize relative efficiency of methods in Figure S10 and S11.
  - plot_tuning.R: visualize results of tuning in Figure S3 and S4.
+ - plot_PRScs_a.R: visualize results of tuning in Figure S5.
  
  ### run-methods
  To reproduce the real data analysis results for disease traits, please first download the publicly available GWAS summary statistics and run process_disease_dat.R. For continuous traits, obtain the genotype and phenotype data from the UK Biobank and run process_continuous_dat.R. Next, run sumdat_QC.R to perform quality control and generate the required input summary statistics for each method. Finally, follow the guidance in each method’s tutorial to obtain the appropriate LD reference panel and run the corresponding R scripts for each method.
