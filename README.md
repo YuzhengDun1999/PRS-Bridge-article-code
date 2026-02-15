@@ -1,3 +1,4 @@
+
 # PRS-Bridge-article-code
 
 This repository contains instruction and scripts to reproduce all the synthetic and real data analysis results in the PRS-Bridge article, benchmarking the following methods: PRS-Bridge, LDpred2, LASSOSUM, and PRS-CS, PRS-CS-Projection, PRS-CS-threshold, and PRS-CS-Regularized.
@@ -11,13 +12,25 @@ All the (bash) commands to reproduce the results should be run from the reposito
 ## Data Download
 -   **Synthetic data:**  
     Download from  [https://doi.org/10.7910/DVN/COXHAP](https://doi.org/10.7910/DVN/COXHAP).
--   **Real data:**
-    -   Disease traits: check our manuscript and acc_form for reference and download link.
-    <br>_(Afaik, the ACC form isn't going to be published. And you don't provide the download links in the manuscript. Please provide them here explicitly, making it clear which link corresponds to which phenotype. Also describe what file formats they come in.)_
-    -   Continuous traits: Individual-level genotype and phenotype data UK Biobank (application required). Follow the instruction in run-real-data-analysis/process_continuous_dat.R to get summary statistics.
+-   **Real data (disease traits):**
+    -   Breast Cancer: Use the link in [https://www.ccge.medschl.cam.ac.uk/breast-cancer-association-consortium-bcac/data-data-access/summary-results/gwas-summary-results](https://www.ccge.medschl.cam.ac.uk/breast-cancer-association-consortium-bcac/data-data-access/summary-results/gwas-summary-results) and download 'oncoarray_bcac_public_release_oct17.txt.gz'. After decompress the file, place 'oncoarray_bcac_public_release_oct17.txt' in the root directory.
+    -    Coronary Artery disease: Download "CARDIoGRAMplusC4D 1000 Genomes-based GWAS – Additive" from [https://cardiogramplusc4d.org/data-downloads/](https://cardiogramplusc4d.org/data-downloads/). Put 'cad.add.160614.website.txt' in the root directory.
+    -    Depression: Download from [https://doi.org/10.6084/m9.figshare.21655784](https://doi.org/10.6084/m9.figshare.21655784). Place 'daner_pgc_mdd_meta_w2_no23andMe_rmUKBB' in the root directory.
+    -    Inflammatory Bowel Disease: Download 'Latest combined GWAS and Immunochip trans-ancestry' from [https://www.ibdgenetics.org/](https://www.ibdgenetics.org/). Place 'EUR.IBD.gwas_info03_filtered.assoc' in the root directory.
+     -    Rheumatoid Arthritis: Download 'Eurpean RA GWAS meta-analysis' from [http://plaza.umin.ac.jp/~yokada/datasource/files/GWASMetaResults/RA_GWASmeta_European_v2.txt.gz](http://plaza.umin.ac.jp/~yokada/datasource/files/GWASMetaResults/RA_GWASmeta_European_v2.txt.gz). Place 'RA_GWASmeta_European_v2.txt.gz' in the root directory.
+    <br>_(Afaik, the ACC form isn't going to be published. And you don't provide the download links in the manuscript. Please provide them here explicitly, making it clear which link corresponds to which phenotype. Also describe what file formats they come in.)
+    I am not sure if it's necessary to describe the file formats. They are all text files and process_disease_dat.R read the files with the same name. For CAD, I have no idea why the summary statistics cannot be downloaded now. It can be directly downloaded several years ago. I find this in their website and I do not know if this is the reason: Please note that CARDIoGRAMplusC4D is currently undertaking the analyses listed under [Ongoing Projects](https://cardiogramplusc4d.org/ongoing-projects/), please contact the relevant PI if you wish to discuss collaborating. Can I just revise the ACC form and move CAD summary statistics to data needed request? This issue is same for inflammatory bowel disease. In their original website, it will appear 'This link has been deleted' if you click the original link._
+
+-   **Real data (continuous traits):**
+	First get access to the Individual-level genotype and phenotype data UK Biobank (application required). Then run `Rscript process_continuous_dat.R TRAIT FIELD_ID PATH_TO_PHENO PATH_TO_PSAM` to generate the corresponding GWAS summary statistics for each continuous trait. 'TRAIT' is the user-specified name of the trait. It must be the same in this whole pipeline. 'FIELD_ID' is the corresponding field ID of the trait in the UK Biobank phenotype file. 'PATH_TO_PHENO' should be the path to your UK Biobank phenotype file. The file must contain the following field IDs: 'f.eid', 'f.31.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', 'f.21000.0.0', as well as the field specified by the second input parameter. 'PATH_TO_PSAM' should be the path to your UK Biobank '.psam' file. The '.psam' file from any chromosome is acceptable. The resulting GWAS summary statistics will be store in the file 'data/sumdat_Rcov.txt'.
+     -    BMI: Run `Rscript process_continuous_dat.R BMI f.21001.0.0 PATH_TO_PHENO PATH_TO_PSAM`. 
+     -    Resting Heart Rate: Run `Rscript process_continuous_dat.R RHR f.102.0.0 PATH_TO_PHENO PATH_TO_PSAM`. 
+     -    High-density lipoprotein: Run `Rscript process_continuous_dat.R HDL f.30760.0.0 PATH_TO_PHENO PATH_TO_PSAM`.
+     -    Low-density lipoprotein: Run `Rscript process_continuous_dat.R LDL f.30780.0.0 PATH_TO_PHENO PATH_TO_PSAM`.
+     -    Apolipoprotein A: Run `Rscript process_continuous_dat.R APOEA f.30630.0.0 PATH_TO_PHENO PATH_TO_PSAM`.
+     -    Apolipoprotein B: Run `Rscript process_continuous_dat.R APOEB f.30640.0.0 PATH_TO_PHENO PATH_TO_PSAM`.
 
 To reproduce the numerical results via the steps outlined below, all the downloaded files should be place in the root directory of this GitHub directory.
-<br>_(This will create a mess, but it looks like you hardcoded the relative paths this way. It makes more sense to place all the downloaded files in a folder like `raw_data` and the processed ones in `processed_data`, but it is also acceptable to keep things as they are.)_
 
 
 ## Steps to Reproduce Numerical Results

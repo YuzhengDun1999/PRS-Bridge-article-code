@@ -2,12 +2,18 @@
 ########## Out put sumdat_Rcov.txt should have exactly same format and name as data/sumdat_Rcov.txt
 library(dplyr)
 
+temp <- commandArgs(TRUE)
+trait = temp[1] # phenotype name, same for the whole pipeline
+field_id =  temp[2] # field ID of phenotype
+pheno = temp[3] # path to your phenotype file pheno.rds
+psam_path = temp[4] # path to your psam file of any chromosome, chr1.psam
+
 ########## load your phenotype data ##############
-dat = readRDS('pheno.rds') ##### path to your UK Biobank phenotype data
+dat = readRDS(pheno) ##### path to your UK Biobank phenotype data
 dat = dat[which(dat$f.22020 == "Yes"),] ##### only include independent EUR individuals
 dat = dat[which(dat$f.21000.0.0 %in% c("White", "British", "Irish", "Any other white background")),] 
 
-psam_chr1 <- bigreadr::fread2("chr1.psam") #### change to your path to genotype file
+psam_chr1 <- bigreadr::fread2(psam_path) #### change to your path to genotype file
 col_names <- colnames(dat)
 
 # first ten principal components
@@ -36,8 +42,8 @@ cov_tune = cov[tune_idx, ]
 cov_valid = cov[valid_idx, ]
 
 #### extract phenotype
-trait = "BMI" ##### change your trait and corresponding field.id, can be searched on UKBB website
-field_id = "21001.0.0"
+#trait = "BMI" ##### change your trait and corresponding field.id, can be searched on UKBB website
+#field_id = "21001.0.0"
 trait_col = col_names[str_detect(col_names, field_id)]
 pheno = data.frame(FID = dat[, "f.eid"], IID = dat[, "f.eid"], y = dat[, trait_col])
 readr::write_tsv(pheno, paste0('data/pheno.txt'))
@@ -66,7 +72,7 @@ system(prscode)
 ### process GWAS to required input form
 sumdat = bigreadr::fread2("data/GWAS.y.glm.linear")
 freq = bigreadr::fread2(paste0('data/MAF.afreq'))
-freq = freq %>% filter(ID %in% sumdat$ID)
+freq = freq %>% filter(ID %in% sumdat$ID)cont
 names(sumdat) = c("CHR", "POS","SNP_ID","REF","ALT", "A1", "TEST", "N","BETA", "SE","T", "PVAL")
 sumdat$REF_FREQ = 1-freq[,5]
 sumdat = sumdat %>% select(CHR, POS, SNP_ID, REF, ALT, REF_FRQ, PVAL, BETA, SE, N)
