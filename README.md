@@ -6,7 +6,7 @@ All the (bash) commands to reproduce the results should be run from the reposito
 
 
 ## Prerequisites
--   **External software:**  PRS-Bridge [https://github.com/YuzhengDun1999/PRSBridge](https://github.com/YuzhengDun1999/PRSBridge); PRS-CS [https://github.com/getian107/PRScs](https://github.com/getian107/PRScs); Plink 1.9 [https://www.cog-genomics.org/plink/](https://www.cog-genomics.org/plink/) and 2.0 [https://www.cog-genomics.org/plink/2.0/](https://www.cog-genomics.org/plink/2.0/); LDpred2 [https://privefl.github.io/bigsnpr/articles/LDpred2.html](https://privefl.github.io/bigsnpr/articles/LDpred2.html); LASSOSUM [https://github.com/tshmak/lassosum](https://github.com/tshmak/lassosum).
+-   **External software:**  PRS-Bridge [https://github.com/YuzhengDun1999/PRSBridge](https://github.com/YuzhengDun1999/PRSBridge); PRS-CS [https://github.com/getian107/PRScs](https://github.com/getian107/PRScs); Plink 1.9 [https://www.cog-genomics.org/plink/](https://www.cog-genomics.org/plink/) and 2.0 [https://www.cog-genomics.org/plink/2.0/](https://www.cog-genomics.org/plink/2.0/); LDpred2 [https://privefl.github.io/bigsnpr/articles/LDpred2.html](https://privefl.github.io/bigsnpr/articles/LDpred2.html); LASSOSUM [https://github.com/tshmak/lassosum](https://github.com/tshmak/lassosum). Please follow the method’s tutorial to prepare the LD reference data, and place all LD-related files in the 'data/' directory.
 -   **Data:**  UK Biobank access for real trait analyses; synthetic data and summary statistics for disease traits public available.
 
 ## Data Download
@@ -22,7 +22,7 @@ All the (bash) commands to reproduce the results should be run from the reposito
     I am not sure if it's necessary to describe the file formats. They are all text files and process_disease_dat.R read the files with the same name. For CAD, I have no idea why the summary statistics cannot be downloaded now. It can be directly downloaded several years ago. I find this in their website and I do not know if this is the reason: Please note that CARDIoGRAMplusC4D is currently undertaking the analyses listed under [Ongoing Projects](https://cardiogramplusc4d.org/ongoing-projects/), please contact the relevant PI if you wish to discuss collaborating. Can I just revise the ACC form and move CAD summary statistics to data needed request? This issue is same for inflammatory bowel disease. In their original website, it will appear 'This link has been deleted' if you click the original link._
 
 -   **Real data (continuous traits):**
-	First get access to the Individual-level genotype and phenotype data UK Biobank (application required). Then run `Rscript process_continuous_dat.R TRAIT FIELD_ID PATH_TO_PHENO PATH_TO_PSAM` to generate the corresponding GWAS summary statistics for each continuous trait. 'TRAIT' is the user-specified name of the trait. It must be the same in this whole pipeline. 'FIELD_ID' is the corresponding field ID of the trait in the UK Biobank phenotype file. 'PATH_TO_PHENO' should be the path to your UK Biobank phenotype file. The file must contain the following field IDs: 'f.eid', 'f.31.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', 'f.21000.0.0', as well as the field specified by the second input parameter. 'PATH_TO_PSAM' should be the path to your UK Biobank '.psam' file. The '.psam' file from any chromosome is acceptable. The resulting GWAS summary statistics will be store in the file 'data/sumdat_Rcov.txt'.
+	First get access to the Individual-level genotype and phenotype data UK Biobank (application required). Then run `Rscript process_continuous_dat.R TRAIT FIELD_ID PATH_TO_PHENO PATH_TO_PSAM` to generate the corresponding GWAS summary statistics for each continuous trait. 'TRAIT' is the user-specified name of the trait. It must be the same in this whole pipeline. 'FIELD_ID' is the corresponding field ID of the trait in the UK Biobank phenotype file. 'PATH_TO_PHENO' should be the path to your UK Biobank phenotype file. The file must contain the following field IDs: 'f.eid', 'f.31.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', 'f.21000.0.0', as well as the field specified by the second input parameter. 'PATH_TO_PSAM' should be the path to your UK Biobank '.psam' file. The '.psam' file from any chromosome is acceptable. The resulting GWAS summary statistics will be stored in the file 'data/sumdat_Rcov.txt'.
      -    BMI: Run `Rscript process_continuous_dat.R BMI f.21001.0.0 PATH_TO_PHENO PATH_TO_PSAM`. 
      -    Resting Heart Rate: Run `Rscript process_continuous_dat.R RHR f.102.0.0 PATH_TO_PHENO PATH_TO_PSAM`. 
      -    High-density lipoprotein: Run `Rscript process_continuous_dat.R HDL f.30760.0.0 PATH_TO_PHENO PATH_TO_PSAM`.
@@ -37,14 +37,11 @@ To reproduce the numerical results via the steps outlined below, all the downloa
 
 ### PRS-CS's non-convergence behavior in the absence of the ad-hoc constraint (Figure 1)
 
-_(It is confusing that your current file `plot_fig1.R` actually runs a Python script to generate the necessary outputs, rather than simply making the plot out of existing outputs. Adopt the workflow as blow and modify the R script appropriately.)_
-
-1. Run the version of PRS-CS without the ad-hoc constraint via the command `python PRS-CS-proj/PRScs_noconverge.py --ref_dir=LD_REFERNCE_DIR --bim_prefix=data/chr22  --sst_file=data/PRScs_sumdat.txt --n_gwas=284389 --out_dir=data/coef_noconverge --chrom=22 --write_pst=True --phi=1e-04 --thin=1 --n_iter=800 --n_burnin=1 --seed=1` where `LD_REFERNCE_DIR` should be set as .... 
-The resulting MCMC output will be stored it in the file `...`.
-_(Can you just `--ref_dir="data/...` instead?)_
+1. Run the version of PRS-CS without the ad-hoc constraint via the command `python PRS-CS-proj/PRScs_noconverge.py --ref_dir=data/ldblk_1kg_eur --bim_prefix=data/chr22  --sst_file=data/PRScs_sumdat.txt --n_gwas=284389 --out_dir=data/coef_noconverge --chrom=22 --write_pst=True --phi=1e-04 --thin=1 --n_iter=800 --n_burnin=1 --seed=1`.
+The resulting MCMC output will be stored it in the file `data/coef_noconverge_pst_eff_a1_b0.5_phi1e-04_chr22.txt`.
 2. Run the version of PRS-CS without the ad-hoc constraint but with our projection approach via
-`python PRS-CS-proj/PRScs_proj.py --ref_dir=LD_REFERNCE_DIR--bim_prefix=data/chr22  --sst_file=data/PRScs_sumdat.txt --n_gwas=284389 --out_dir=data/coef_proj --chrom=22 --write_pst=True --phi=1e-04 --thin=1 --n_iter=800 --n_burnin=1 --seed=1 --eigenval_rm=0.2`.
-The resulting MCMC output will be stored it in the file `...`.
+`python PRS-CS-proj/PRScs_proj.py --ref_dir=data/ldblk_1kg_eur --bim_prefix=data/chr22  --sst_file=data/PRScs_sumdat.txt --n_gwas=284389 --out_dir=data/coef_proj --chrom=22 --write_pst=True --phi=1e-04 --thin=1 --n_iter=800 --n_burnin=1 --seed=1 --eigenval_rm=0.2`.
+The resulting MCMC output will be stored it in the file `data/coef_proj_pst_eff_a1_b0.5_phi1e-04_chr22.txt`.
 3. Plot the results via `Rscript plot-results/plot_figure1.R`.
 
 ### Synthetic Data Results

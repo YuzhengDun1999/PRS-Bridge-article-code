@@ -2,8 +2,7 @@ library(dplyr)
 library(ggplot2)
 library(ggpubr)
 
-############# run PRS-CS without projection ##############
-system("python PRS-CS-proj/PRScs_noconverge.py --ref_dir=LD_REFERNCE_DIR --bim_prefix=data/chr22  --sst_file=data/PRScs_sumdat.txt --n_gwas=284389 --out_dir=data/coef_noconverge --chrom=22 --write_pst=True --phi=1e-04 --thin=1 --n_iter=800 --n_burnin=1 --seed=1")
+#system("python PRS-CS-proj/PRScs_noconverge.py --ref_dir=LD_REFERNCE_DIR --bim_prefix=data/chr22  --sst_file=data/PRScs_sumdat.txt --n_gwas=284389 --out_dir=data/coef_noconverge --chrom=22 --write_pst=True --phi=1e-04 --thin=1 --n_iter=800 --n_burnin=1 --seed=1")
 
 ############# plot non-convergence-result ###############
 PRScs = bigreadr::fread2("data/coef_noconverge_pst_eff_a1_b0.5_phi1e-04_chr22.txt")
@@ -23,11 +22,10 @@ plot1 = ggplot(data = dat %>% filter(iter <= 700)) + geom_point(mapping = aes(x 
   scale_y_continuous(trans = 'log10', limits = y_range, labels = scales::trans_format('log10', scales::math_format(10^.x))) + scale_color_manual(values = c("#00AFBB", "#E7B800", "#FC4E07")) +
   guides(color = guide_legend(override.aes = list(size = 6)))
 
-############# run PRS-CS with projection ##############
-system("python PRS-CS-proj/PRScs_proj.py --ref_dir=LD_REFERNCE_DIR--bim_prefix=data/chr22  --sst_file=data/PRScs_sumdat.txt --n_gwas=284389 --out_dir=data/coef_proj --chrom=22 --write_pst=True --phi=1e-04 --thin=1 --n_iter=800 --n_burnin=1 --seed=1 --eigenval_rm=0.2")
+#system("python PRS-CS-proj/PRScs_proj.py --ref_dir=LD_REFERNCE_DIR--bim_prefix=data/chr22  --sst_file=data/PRScs_sumdat.txt --n_gwas=284389 --out_dir=data/coef_proj --chrom=22 --write_pst=True --phi=1e-04 --thin=1 --n_iter=800 --n_burnin=1 --seed=1 --eigenval_rm=0.2")
 
 ############# plot projection result ###############
-PRScs_proj = bigreadr::fread2("~/Documents/PRS_Bridge/R_Code/PRS-Bridge-code/data/coef_proj_pst_eff_a1_b0.5_phi1e-04_chr22.txt")
+PRScs_proj = bigreadr::fread2("data/coef_proj_pst_eff_a1_b0.5_phi1e-04_chr22.txt")
 coef = as.matrix(PRScs_proj[,6:804]); rownames(coef) = NULL; colnames(coef) = NULL
 
 ### Create same plots for different SNPs
