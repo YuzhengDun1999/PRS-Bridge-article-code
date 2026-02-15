@@ -8,6 +8,9 @@ field_id =  temp[2] # field ID of phenotype
 pheno = temp[3] # path to your phenotype file pheno.rds
 psam_path = temp[4] # path to your psam file of any chromosome, chr1.psam
 
+system(paste0("mkdir ", trait))
+system(paste0("mkdir tuning"))
+system(paste0("mkdir validation"))
 ########## load your phenotype data ##############
 dat = readRDS(pheno) ##### path to your UK Biobank phenotype data
 dat = dat[which(dat$f.22020 == "Yes"),] ##### only include independent EUR individuals
@@ -46,9 +49,9 @@ cov_valid = cov[valid_idx, ]
 #field_id = "21001.0.0"
 trait_col = col_names[str_detect(col_names, field_id)]
 pheno = data.frame(FID = dat[, "f.eid"], IID = dat[, "f.eid"], y = dat[, trait_col])
-readr::write_tsv(pheno, paste0('data/pheno.txt'))
+readr::write_tsv(pheno, paste0(trait, '/pheno.txt'))
 
-readr::write_tsv(cov_train, paste0('data/training_cov.txt'))
+readr::write_tsv(cov_train, paste0(trait, '/training_cov.txt'))
 cov_tune = merge(cov_tune, pheno, by = c("FID", "IID"))
 readr::write_tsv(cov_tune, paste0('tuning/', trait, '_cov.txt'))
 cov_valid = merge(cov_valid, pheno, by = c("FID", "IID"))
@@ -57,23 +60,23 @@ readr::write_tsv(cov_valid, paste0('validation/', trait, '_cov.txt'))
 ### run GWAS
 GWAS_code = paste(paste0('plink2'),
                   paste0(' --bfile allchr'), #### path to your genotype file
-                  paste0(' --pheno data/pheno.txt '),
-                  paste0(' --covar data/training_cov.txt  --snps-only '),
+                  paste0(' --pheno ', trait, '/pheno.txt '),
+                  paste0(' --covar ', trait, '/training_cov.txt  --snps-only '),
                   paste0(' --glm --hwe 1e-07 --geno 0.05  --mind 0.05 --maf 0.01 --mach-r2-filter 0.8 2 '),
-                  paste0(' --out data/GWAS'))
+                  paste0(' --out ',  trait, '/GWAS'))
 system(prscode)
 ### calculate minor allele frequency
 GWAS_code = paste(paste0('plink2'),
                   paste0(' --bfile allchr'), #### path to your genotype file
                   paste0(' --freq --hwe 1e-07 --geno 0.05  --mind 0.05 --maf 0.01 --mach-r2-filter 0.8 2 '),
-                  paste0(' --out data/MAF'))
+                  paste0(' --out ', trait, '/MAF'))
 system(prscode)
 
 ### process GWAS to required input form
-sumdat = bigreadr::fread2("data/GWAS.y.glm.linear")
-freq = bigreadr::fread2(paste0('data/MAF.afreq'))
+sumdat = bigreadr::fread2(trait, "/GWAS.y.glm.linear")
+freq = bigreadr::fread2(paste0(trait, '/MAF.afreq'))
 freq = freq %>% filter(ID %in% sumdat$ID)cont
 names(sumdat) = c("CHR", "POS","SNP_ID","REF","ALT", "A1", "TEST", "N","BETA", "SE","T", "PVAL")
 sumdat$REF_FREQ = 1-freq[,5]
 sumdat = sumdat %>% select(CHR, POS, SNP_ID, REF, ALT, REF_FRQ, PVAL, BETA, SE, N)
-bigreadr::fwrite2(dat, file = "data/sumdat_Rcov.txt", sep = "\t")
+bigreadr::fwrite2(dat, file = paste0(trait, "/sumdat_Rcov.txt"), sep = "\t")

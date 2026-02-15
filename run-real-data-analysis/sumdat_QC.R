@@ -1,7 +1,9 @@
 ######### this script is for generating summary statistics required for input for every method after quality control.
 ######### Input summary statistics must have same format as in data/sumdat_Rcov.txt
-sumdat = bigreadr::fread2('data/sumdat_Rcov.txt') ###### Change the path to your summary statistics, it must have the same format and name as the example shown in the data/sumdat_Rcov.txt
-trait = "Example"
+temp <- commandArgs(TRUE)
+trait = temp[1] # phenotype name, same for the whole pipeline
+
+sumdat = bigreadr::fread2(paste0(trait, '/sumdat_Rcov.txt')) ###### Change the path to your summary statistics, it must have the same format and name as the example shown in the data/sumdat_Rcov.txt
 system(paste0("mkdir -p ", trait, "/data/chr{1..22}"))
 
 ################### preprocess summary level data ################
