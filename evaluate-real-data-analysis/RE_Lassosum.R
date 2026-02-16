@@ -1,4 +1,4 @@
-trait_list = c("Example") # a list of trait to get relative efficiency, baseline is LASSOSUM.
+trait_list = c("BC", "CAD", "IBD", "Depression", "RA", "BMI", "HDL", "LDL", "APOEA", "APOEB", "RHR") # a list of trait to get relative efficiency, baseline is LASSOSUM.
 
 get_validation = function(dat){
   result_validation = data.frame(matrix(ncol = 2, nrow = 0))

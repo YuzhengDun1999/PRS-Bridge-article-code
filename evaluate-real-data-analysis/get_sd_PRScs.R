@@ -1,13 +1,15 @@
 ####### This script is used for evaluation of PRS-CS ###########
-outcome = "continuous" # change to continuous if your outcome is continuous 
+temp <- commandArgs(TRUE)
+trait = temp[1] # phenotype name, same for the whole pipeline
+outcome = temp[2]
+
 source("evaluation/evaluation_metrics.R")
 
 ######### Change the parameters here if you use different set of parameters in run-methods/PRScs.R
 a_list = c(1)
 phi_list = c(0, 1, 0.01, 0.0001, 0.000001)
 name_list = c('auto', '1e+00', '1e-02', '1e-04', '1e-06')
-Ref = c('ukbb') # LD reference data you use in PRScs.R, can be 'ukbb' and '1kg'
-trait = "Example"
+Ref = c('ukbb', '1kg') # LD reference data you use in PRScs.R, can be 'ukbb' and '1kg'
 
 ############## PRS-CS and PRS-CS-auto ###########
 library(dplyr)
