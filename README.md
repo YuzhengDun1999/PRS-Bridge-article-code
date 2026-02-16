@@ -45,31 +45,18 @@ The resulting MCMC output will be stored it in the file `data/coef_proj_pst_eff_
 3. Plot the results via `Rscript plot-results/plot_figure1.R`.
 
 ### Synthetic Data Results
-1.  **Download synthetic data**  (see above)
-2.  **Preprocess summary statistics:** Run `Rscript run-synthetic-data-analysis/process_synthetic_dat.R RHO GA` to preprocess the GWAS summary statistics under the specified settings of `RHO` and `GA`. `RHO` controls the proportion of causal SNPs. It takes values 1, 2, or 3, corresponding to causal SNP proportions of 0.01, 0.001, and 0.0005, respectively. `GA` controls the genetic architecture. It takes values 1, 4, or 5, corresponding to strong negative selection, no negative selection, and mild negative selection, respectively. The parameterization follows the original simulation settings. Further details can be found in the README file at: https://doi.org/10.7910/DVN/COXHAP. The processed GWAS summary statistics used as input for each method are stored in the directory: `rho{RHO}GA{GA}/sumdat/`.
-3.  **Run PRS methods:**  Run `Rscript run-synthetic-data-analysis/PRSBridge.R RHO GA`, `Rscript run-synthetic-data-analysis/PRScs.R RHO GA`, and `Rscript run-synthetic-data-analysis/ldpred2.R RHO GA`; the input parameters are the same as those in `process_synthetic_dat.R`. Please see each method's tutorial on how to estimate or download LD reference panel.
-4.  **Evaluate results:** Run `run-synthetic-data-analysis/evaluation.R RHO GA`; input parameters are the same as `process_synthetic_dat.R`.
-5.  **Visualize:**  Plot the results via `Rscript run-synthetic-data-analysis/plot.R`.
+1.  Run `Rscript run-synthetic-data-analysis/process_synthetic_dat.R RHO GA` to preprocess the GWAS summary statistics under the specified settings of `RHO` and `GA`. `RHO` controls the proportion of causal SNPs. It takes values 1, 2, or 3, corresponding to causal SNP proportions of 0.01, 0.001, and 0.0005, respectively. `GA` controls the genetic architecture. It takes values 1, 4, or 5, corresponding to strong negative selection, no negative selection, and mild negative selection, respectively. The parameterization follows the original simulation settings. Further details can be found in the README file at: https://doi.org/10.7910/DVN/COXHAP. The processed GWAS summary statistics used as input for each method are stored in the directory: `rho{RHO}GA{GA}/sumdat/`.
+2. Run `Rscript run-synthetic-data-analysis/PRSBridge.R RHO GA`, `Rscript run-synthetic-data-analysis/PRScs.R RHO GA`, and `Rscript run-synthetic-data-analysis/ldpred2.R RHO GA`; the input parameters are the same as those in `process_synthetic_dat.R`. Please see each method's tutorial on how to estimate or download LD reference panel.
+3. Run `run-synthetic-data-analysis/evaluation.R RHO GA`; input parameters are the same as `process_synthetic_dat.R`.
+4. Plot the results via `Rscript run-synthetic-data-analysis/plot.R`.
 
 
-### Real Data Results on Continuous Diseases
-_Fill in_
-
-### Real Data Results on Binary Diseases
-_(I realize the step-by-step instructions I wrote up below probably aren't exactly correct, but the point is to give you an example of an actually reproducible workflow. 
-In particular, users shouldn't have to read the comments inside your R scripts and modify/run different pieces of codes manually; that wouldn't be very reproducible.)_
-
-1. Run `Rscript run-real-data-analysis/process_disease_dat.R`. 
-This will generate a file  `data/sumdat_Rcov.txt` containing processed data, to be fed into the PRS pipelines.<br>
-_(It looks like all the analyses use the same file name:
-https://github.com/YuzhengDun1999/PRS-Bridge-article-code/blob/main/run-real-data-analysis/process_disease_dat.R#L12?
-So you have to manually run a specific part of the script for each trait? 
-This is such a bad design. 
-Ideally, you should modify the code so that the datasets have different names.
-If that takes too much work, at least add an input argument, like `run-real-data-analysis/process_disease_dat.R RA`, so that you can still run the whole pipeline more programmatically.)_
-2. Run the quality control via `Rscript run-real-data-analysis/sumdat_QC.R`.
-This will generate files `.../...`. 
-3. Run the PRS methods on the preprocessed data via `Rscript run-real-data-analysis/${method_name}.R` where `method_name` can be chosen from `PRSBridge`, `PRScs`, `PRScs_proj`, `PRScs_regularized`, `PRScs_threshold`, and `ldpred2`.
+### Real Data Results
+1. Run the quality control step via `Rscript run-real-data-analysis/sumdat_QC.R TRAIT`, where `TRAIT` should match the input parameter specified in the **Data Download and Pre-process** section. This will generate files in the directory `{TRAIT}/data/`.
+2.  Run the PRS methods on the preprocessed data:
+     -   Lassosum: Run `Rscript run-real-data-analysis/LASSOSUM.R TRAIT PATH_TO_1kg 1kg` and `Rscript run-real-data-analysis/LASSOSUM.R TRAIT PATH_TO_UKBB ukbb`, where  `TRAIT` should match the input parameter specified in the previous step; `PATH_TO_1kg` and `PATH_TO_UKBB` are the paths to the individual-level genotype data used to construct the corresponding LD reference panels. This will generate coefficients in the directory `{TRAIT}/LASSOSUM/`
+     - 
+ `Rscript run-real-data-analysis/${method_name}.R` where `method_name` can be chosen from `PRSBridge`, `PRScs`, `PRScs_proj`, `PRScs_regularized`, `PRScs_threshold`, and `ldpred2`.
 
 **Note:** 
 Under the `data` folder, we have provided a preprocessed sample dataset which can be used, without having to complete Step 1 and 2above, to run the version of PRS-CS without the ad hoc constraint on Chromosome 22 and generate the MCMC samples as plotted in Figure 1 of the manuscript.

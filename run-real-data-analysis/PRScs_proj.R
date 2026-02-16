@@ -1,4 +1,7 @@
 ########### This script is used to generate and submit script files for PRS-CS-Projection
+temp <- commandArgs(TRUE)
+trait = temp[1] # phenotype name, same for the whole pipeline
+
 a_list = c(1) # controlling prior sparsity assumption. Default: 1, can be 0.5, 1.0, 1.5
 phi_list = c(0, 1, 0.01, 0.0001, 0.000001) # controlling prior sparsity assumption. Recommended: 0, 1, 0.01, 0.0001, 0.000001
 percent_list = c(0.2, 0.4, 0.6, 0.8) # controlling percent of eigenvalue removed. Recommended: 0.2, 0.4, 0.6, 0.8

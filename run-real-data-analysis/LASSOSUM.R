@@ -3,17 +3,18 @@ library(lassosum)
 library(parallel)
 setwd(system.file("data", package="lassosum")) # Directory where data and LD region files are stored
 library(data.table)
-
-trait = "Example"
-ref_N = "1kg" # can be 1kg and individuals from UKBB data
+temp <- commandArgs(TRUE)
+trait = temp[1] # phenotype name, same for the whole pipeline
+ref = temp[2]
+ref_N = temp[3] # can be 1kg and individuals from UKBB data
 
 for (chr in 1:22) {
-  sum.raw = bigreadr::fread2('data/sumdat_Rcov.txt')
+  sum.raw = bigreadr::fread2(paste0(trait, '/sumdat_Rcov.txt'))
   sum.raw = as.data.frame(sum.raw)
   sumdat = sum.raw[sum.raw$CHR == chr, ]
-  ref.bfile = paste0("chr", chr) # path to your LD reference file, has to be individual level data
+  ref.bfile = paste0(ref, "/chr", chr) # path to your LD reference file, has to be individual level data
   
-  test.bfile <- paste0("chr", chr) # path to your test gentic data
+  test.bfile <- paste0("tuning/chr", chr)
   LDblocks <- "EUR.hg19"
   cl <- makeCluster(2, type="FORK")
   sumdat$PVAL[sumdat$PVAL < .Machine$double.xmin] = .Machine$double.xmin * 10
@@ -35,13 +36,13 @@ for (chr in 1:22) {
   
   prscode = paste(paste0('plink2'),
                   paste0('--score ', trait, '/LASSOSUM/chr', chr, '/LASSOSUMeffect-hm3-EUR-ref_N', ref_N, '.txt'),
-                  paste0(' 1 3 cols=+scoresums,-scoreavgs --score-col-nums 4-83 --bfile chr', chr),
+                  paste0(' 1 3 cols=+scoresums,-scoreavgs --score-col-nums 4-83 --bfile tuning/chr', chr),
                   paste0(' --out ', trait, '/LASSOSUM/chr', chr, "/ref_N", ref_N, "validation"))
   system(prscode)
   
   prscode = paste(paste0('plink2'),
                   paste0('--score ', trait, '/LASSOSUM/chr', chr, '/LASSOSUMeffect-hm3-EUR-ref_N', ref_N, '.txt'),
-                  paste0(' 1 3 cols=+scoresums,-scoreavgs --score-col-nums 4-83 --bfile chr', chr),
+                  paste0(' 1 3 cols=+scoresums,-scoreavgs --score-col-nums 4-83 --bfile validation/chr', chr),
                   paste0(' --out ', trait, '/LASSOSUM/chr', chr, "/ref_N", ref_N, "tuning"))
   system(prscode)
 }

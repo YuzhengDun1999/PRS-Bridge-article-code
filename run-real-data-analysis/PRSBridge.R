@@ -1,6 +1,8 @@
 ####### This script is used for generating script files for running PRS-Bridge
 library(dplyr)
-trait = "Example"
+temp <- commandArgs(TRUE)
+trait = temp[1] # phenotype name, same for the whole pipeline
+
 system(paste0("mkdir -p ", trait, "/1kg/Bridge_small/run_sh/chr{1..22}"))
 system(paste0("mkdir -p ", trait, "/ukbb/Bridge_small/run_sh/chr{1..22}"))
 system(paste0("mkdir -p ", trait, "/1kg/Bridge_large/run_sh/chr{1..22}"))
