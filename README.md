@@ -52,6 +52,7 @@ The resulting MCMC output will be stored it in the file `data/coef_proj_pst_eff_
 
 
 ### Real Data Results
+The computational demands make it unrealistic to reproduce the full results on a local machine, especially for PRS-Bridge and PRS-CS; therefore, the provided R scripts instead generate a set of .sh files that can be submitted to a high-performance computing cluster (HPC) running on SLURM.  The commands for running each method are specified within the generated .sh files. For LASSOSUM and ldpred2, we also provide scripts for directly running the methods, though we recommend similarly executing them on an HPC system.
 1. Run the quality control step via `Rscript run-real-data-analysis/sumdat_QC.R TRAIT`, where `TRAIT` should match the input parameter specified in the **Data Download and Pre-process** section. This will generate files in the directory `{TRAIT}/data/`.
 2.  Run the PRS methods on the preprocessed data:
      -   Lassosum: Run `Rscript run-real-data-analysis/LASSOSUM.R TRAIT PATH_TO_1kg 1kg` and `Rscript run-real-data-analysis/LASSOSUM.R TRAIT PATH_TO_UKBB ukbb`, where  `TRAIT` should match the input parameter specified in the previous step; `PATH_TO_1kg` and `PATH_TO_UKBB` are the paths to the individual-level genotype data used to construct the corresponding LD reference panels. This will generate coefficients in the directory `{TRAIT}/LASSOSUM/`.
@@ -63,8 +64,11 @@ The resulting MCMC output will be stored it in the file `data/coef_proj_pst_eff_
      -   PRS-CS-threshold: Run `Rscript run-real-data-analysis/PRScs_threshold.R TRAIT`, where  `TRAIT` should match the input parameter specified in the previous step. This will generate a brunch of script files to run PRS-CS-threshold in the directory `{TRAIT}/1kg/PRScs_threshold/run_sh` and `{TRAIT}/ukbb/PRScs_threshold/run_sh`. The jobs will then be automatically submitted via SLURM. The coefficients will be stored in the directory `{TRAIT}/1kg/PRScs_threshold/result` and `{TRAIT}/ukbb/PRScs_threshold/result`.
  
 **Note:** 
-Under the `data` folder, we have provided a preprocessed sample dataset which can be used, without having to complete Step 1 and 2above, to run the version of PRS-CS without the ad hoc constraint on Chromosome 22 and generate the MCMC samples as plotted in Figure 1 of the manuscript.
-<br>_(Note how much more details I put here compared to your "reproduce Figure 1." Your explanations tend to be way too incomplete.)_
+Under the `data` folder, we have provided a preprocessed sample dataset which can be directly used to run the version of PRS-CS without the ad hoc constraint on Chromosome 22 and generate the MCMC samples as plotted in Figure 1 of the manuscript.
+
+### evaluate-real-data-analysis
+Having run all the methods on all the datasets, get the performance of each methods via  `Rscript evaluate-real-data-analysis/get_sd_{method_name}.R TRAIT OUTCOME` where `method_name` can be chosen from `PRSBridge`, `ldpred2`, `PRScs`, `PRScs_proj`, `PRScs_regularized`, `PRScs_threshold`, and `ldpred2`; `TRAIT` should match the input parameter specified in the previous step; `OUTCOME` should be set to 'continuous' for continuous traits and 'disease' for disease traits. The performance for each method will be stored in `{TRAIT}/result`. After evaluating all methods across all traits, compute the relative performance of each method compared to Lassosum by running:  `Rscript evaluate-real-data-analysis/RE_lassosum.R`. The resulting file will be stored in root directory.
+
 
 ### Plot results
 Having run all the methods on all the datasets, Figure 4 and 5 can be reproduced via `Rscript plot-result/plot.R`.
@@ -75,13 +79,9 @@ Other figures in the main manuscript and the supplement can be reproduced by run
 This is an optional read for those interested in learning more about the specific files in the above steps to reproduce all the results.
 
 ### data
-This folder contains the data used to generate posterior samples of the regression coefficients used to create Figure 1.
-<br>_(Be more precise about what you mean by "data"; I guess `PRScs_sumdat.txt` contains the summary-level data and `chr22.bim` contains the individual-level data? These are important pieces of information.)_<br>
-Also contained is an example summary-statistics file provided for illustration only.
-<br>_(What does this mean? Illustration of what?)_<br>
-Specifically, the files included are:
--   `PRScs_sumdat.txt`,  `chr22.bim`: For Figure 1. _(Be more precise.)_
--   `sumdat_Rcov.txt`: Example input summary statistics used by the preprocessing scripts in the run-real-data-analysis/ directory to demonstrate how input data should be formatted before preparing data for running all methods.
+This folder contains the following files:
+-   `PRScs_sumdat.txt`,  `chr22.bim`: used to generate posterior samples of the regression coefficients used to create Figure 1. Specifically, `PRScs_sumdat.txt` provides the input GWAS summary statistics for original and extension of PRS-CS, and `chr22.bim` contains the individual-level genotype variant information (PLINK `.bim` file) used as the input for original and extension of PRS-CS.
+-   `sumdat_Rcov.txt`: Example input summary statistics used by the script in the run-real-data-analysis/sumdat_QC.R to demonstrate how input data should be formatted before preparing data for running all methods.
 
 ### PRS-CS-proj
 
@@ -89,61 +89,16 @@ This folder provides our modification of the PRS-CS code, the original version o
 The files included are:
 
 -   `PRScs_noconverge.py`: Implements a modified version of PRS-CS that removes the ad hoc constraint on the prior variance. 
-See `plot-results/plot_fig1.R` for example usage.
-<br>_(There doesn't seem to be any good reason here to bury the example usage inside the script. 
-You can be more explicit and reader-friendly by providing the usage here; e.g. "To obtain the MCMC output shown in Figure 1, you can run `python PRS-CS-proj/PRScs_noconverge.py --ref_dir=LD_REFERNCE_DIR --bim_prefix=data/chr22  --sst_file=data/PRScs_sumdat.txt --n_gwas=284389 --out_dir=data/coef_noconverge --chrom=22 --write_pst=True --phi=1e-04 --thin=1 --n_iter=800 --n_burnin=1 --seed=1`.")_
+See **PRS-CS's non-convergence behavior in the absence of the ad-hoc constraint (Figure 1)** for example usage.
 - `PRScs_threshold.py`: Implements versions of PRS-CS modified to use different values of the upper threshold on the prior variance. 
-See the scripts files generated by `run-real-data-analysis/PRScs_threshold.R` for example usage.
+Example usage: `python PRS-CS-proj/PRScs_threshold.py --ref_dir=data/ldblk_1kg_eur --bim_prefix=data/chr22  --sst_file=data/PRScs_sumdat.txt --n_gwas=284389 --out_dir=data/coef_threshold --chrom=22 --phi=1e-04 --seed=1 --threshold=0.1`.
 <br>_(I don't understand why you need to have a user run this R scripts to generate the bash scripts.
 Why can't you just directly provide the bash scripts generated by this R script and place them in a folder `slurm_scripts/`, for example?
 You can then just provide a bash command, e.g. `sbatch ...`, to submit the simulations to SLURM.
-That way, it is far more transparent what steps are involved in generating the results.)_
+That way, it is far more transparent what steps are involved in generating the results.)
+Yuzheng: PRS-CS needs the GWAS sample size as input (a scalar). Different traits and different SNPs have different sample sizes (missing rate for different SNPs are different). Instead of manually setting the sample size. I use R script to automatically calculate the mean sample size across SNPs and then use that as input. If the current pipeline will be acceptable by the reviewer, I will keep the current.
 -   `PRScs_proj.py`: Implements versions of PRS-CS modified to use projected summary statistics. 
-See the scripts files generated by `run-real-data-analysis/PRScs_proj.R` for example usage.
+See **PRS-CS's non-convergence behavior in the absence of the ad-hoc constraint (Figure 1)** for example usage.
 -   `PRScs_Regularized.py`: Implements versions of PRS-CS modified to use Regularized LD matrix. 
 See the scripts files generated by `run-real-data-analysis/PRScs_Regularized.R` for example usage.
-
-### run-synthetic-data-analysis
-
-This folder contains scripts to reproduce the numerical results of Section 4.1 based on the synthetic data.
-The steps to reproduce the results are as follows:
-
-1.  **Download synthetic data**  (see above)
-2.  **Preprocess summary statistics:** Run `process_synthetic_dat.R`; detailed explanations of the input parameters are provided within the script.
-3.  **Run PRS methods:**  Run `PRSBridge.R`, `PRScs.R`, and `ldpred2.R`; the input parameters are the same as those in `process_synthetic_dat.R`. Please see each method's tutorial on how to estimate or download LD reference panel.
-4.  **Evaluate results:** Run `evaluation.R`; input parameters are the same as `process_synthetic_dat.R`.
-5.  **Visualize:**  Run `plot.R` to produce Figure 3.
-
-### run-real-data-analysis
-
-This folder contains scripts to run each method on the real-data summary statistics. 
-The computational demands make it unrealistic to reproduce the full results on a local machine, especially for PRS-Bridge and PRS-CS;
-therefore, the provided R scripts instead generate a set of .sh files that can be submitted to a high-performance computing cluster (HPC) running on SLURM. 
-The commands for running each method are specified within the generated .sh files. 
-For LASSOSUM and ldpred2, we also provide scripts for directly running the methods, though we recommend similarly executing them on an HPC system.
-
-**Step-by-step workflow:**
-
-1.  **Preprocess GWAS summary statistics:**
-    -   Disease traits: run  `process_disease_dat.R`
-    -   Continuous traits (UK Biobank): run  `process_continuous_dat.R` to get summary statistics
-2.  **Quality control:**  run  `sumdat_QC.R`
-3.  **Run each PRS method:**  
-    Use method-specific scripts (e.g.,  `PRScs.R`,  `PRSBridge.R`, etc.), ensuring the correct LD reference panel is specified (see each method's tutorial on how to estimate or download LD reference panel).
-
-### evaluate-real-data-analysis
-This folder contains scripts for evaluating the methods' performances:
-
--   `RE_Lassosum.R`: Computes relative efficiency for each method.
--   `get_sd_*.R`: Computes $R^2$ (or transformed AUC) and standard errors for each method:
-    -   `get_sd_PRSBridge.R`
-    -   `get_sd_PRScs.R`
-    - ...
-
-### plot-results
-
-This folder contains scripts for visualization of results and reproducing figures:
-
--   `plot.R`: Generates results for Figures 4 and 5.
--   `plot_fig1.R`: Reproduces Figure 1 (posterior coefficients).
--   All plot scripts are annotated to specify which figure they reproduce and what input parameters to use in scripts in run-real-data-analysis section.
+Example usage: `python PRS-CS-proj/PRScs_threshold.py --ref_dir=data/ldblk_1kg_eur --bim_prefix=data/chr22  --sst_file=data/PRScs_sumdat.txt --n_gwas=284389 --out_dir=data/coef_threshold --chrom=22 --phi=1e-04 --seed=1 --regularized=1`.
