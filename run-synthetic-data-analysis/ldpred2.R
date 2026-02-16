@@ -3,22 +3,22 @@ library(bigsnpr)
 temp <- commandArgs(TRUE)
 rho = as.numeric(temp[1]) ###### taking values in 1, 2, 3
 GA = as.numeric(temp[2]) ###### taking values in 1, 4, 5
-
+ref = temp[3]
 trait = paste0('rho', rho, 'GA', GA)
 
 ref_N = "1kg"
 
 ldr = 3/1000
 for (chr in 1:22) {
-  sum.raw = bigreadr::fread2(('data/sumdat_Rcov.txt'))
+  sum.raw = bigreadr::fread2(paste0(trait, '/sumdat_Rcov.txt'))
   sum.raw = as.data.frame(sum.raw)
   
   # ------------------------ Run LDpred2
-  temfile = paste0('ldpred_ref/chr',chr,'_', ref_N, '.bk')
+  temfile = paste0(ref, '/chr',chr, '.bk')
   if (!file.exists(temfile)){
-    snp_readBed(paste0('ldpred_ref/chr',chr,'_', ref_N,'.bed')) ####### path to your reference bed file
+    snp_readBed(paste0(ref, '/chr', chr,'.bed')) ####### path to your reference bed file
   }
-  obj.bigSNP <- snp_attach(paste0('ldpred_ref/chr',chr,'_', ref_N,'.rds'))
+  obj.bigSNP <- snp_attach(paste0(ref, '/chr',chr,'_','.rds'))
   
   G   <- obj.bigSNP$genotypes
   CHR <- obj.bigSNP$map$chromosome
