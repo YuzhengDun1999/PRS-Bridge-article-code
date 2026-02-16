@@ -24,7 +24,7 @@ for (chr in 1:22) {
       sent_dir <- paste0("mkdir -p ", output_dir)
       output_dir = paste0(trait, "/1kg/Bridge_small/chr", chr, "/percent", percent, "/alpha", alpha)
       sumdat = paste0(trait, '/sumdat/chr', chr, '/hm3_sumdat.txt')
-      sent_run <- paste0("python PRSBridge/PRSBridge.py --percent ", percent, " --chr ", chr, " --alpha ", alpha,  " --ref ref_1kg/chr",  " --sumdat ", sumdat,  " --h2 ", 0,  " --h2_se ", 0 ##### change your path to LD reference data here
+      sent_run <- paste0("python PRSBridge/PRSBridge.py --percent ", percent, " --chr ", chr, " --alpha ", alpha,  " --ref data/ref_1kg/chr",  " --sumdat ", sumdat,  " --h2 ", 0,  " --h2_se ", 0 ##### change your path to LD reference data here
                          ,  " --method ", 'cg',  " --output ", output_dir)
       cat(sent_dir, "\n")
       cat("module load anaconda \n")
@@ -64,7 +64,7 @@ for (chr in c(1:22)) {
       output_dir = paste0(trait, "/1kg/Bridge_large/result/chr", chr, "/percent",percent,"/alpha",alpha)
       sumdat = paste0(trait, '/data/chr', chr, '/hm3_sumdat.txt')
       sent_run <- paste0("python PRS_Bridge/PRSBridge.py --percent ", percent,
-                         " --chr ", chr, " --alpha ", alpha,  " --ref ref_1kg_large/chr",  " --sumdat ", sumdat,  " --h2 ", 0,  " --h2_se ", 0 ##### change your path to LD reference data here
+                         " --chr ", chr, " --alpha ", alpha,  " --ref data/ref_1kg_large/chr",  " --sumdat ", sumdat,  " --h2 ", 0,  " --h2_se ", 0 ##### change your path to LD reference data here
                          ,  " --method ", 'cg',  " --output ", output_dir)
       
       cat(sent_dir, "\n")
@@ -107,7 +107,7 @@ for (chr in c(1:22)) {
       ref = '/dcs04/nilanjan/data/ydun/PRS_Bridge/ref_ukbb/chr'
       sumdat = paste0(trait, '/data/chr', chr, '/hm3_sumdat.txt')
       sent_run <- paste0("python /dcs04/nilanjan/data/ydun/tools/PRSBridge/PRSBridge.py --percent ", percent,
-                         " --chr ", chr, " --alpha ", alpha,  " --ref ref_ukbb/chr --sumdat ", sumdat,  " --h2 ", h2,  " --h2_se ", h2_se ##### change your path to LD reference data here
+                         " --chr ", chr, " --alpha ", alpha,  " --ref data/ref_ukbb/chr --sumdat ", sumdat,  " --h2 ", h2,  " --h2_se ", h2_se ##### change your path to LD reference data here
                          ,  " --method ", 'cg',  " --output ", output_dir)
       
       cat(sent_dir, "\n")
@@ -150,7 +150,7 @@ for (chr in c(1:22)) {
       ref = '/dcs04/nilanjan/data/ydun/PRS_Bridge/ref_ukbb_new/chr'
       sumdat = paste0('/dcs04/nilanjan/data/ydun/SinglePRS/', trait, '/data/chr', chr, '/hm3_sumdat.txt')
       sent_run <- paste0("python /dcs04/nilanjan/data/ydun/tools/PRSBridge/PRSBridge.py --percent ", percent,
-                         " --chr ", chr, " --alpha ", alpha,  " --ref ref_ukbb_large/chr",  " --sumdat ", sumdat,  " --h2 ", h2,  " --h2_se ", h2_se ##### change your path to LD reference data here
+                         " --chr ", chr, " --alpha ", alpha,  " --ref data/ref_ukbb_large/chr",  " --sumdat ", sumdat,  " --h2 ", h2,  " --h2_se ", h2_se ##### change your path to LD reference data here
                          ,  " --method ", 'cg',  " --output ", output_dir)
       
       cat(sent_dir, "\n")
