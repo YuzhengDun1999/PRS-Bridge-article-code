@@ -6,7 +6,13 @@ All the (bash) commands to reproduce the results should be run from the reposito
 
 
 ## Prerequisites
--   **External software:**  PRS-Bridge [https://github.com/YuzhengDun1999/PRSBridge](https://github.com/YuzhengDun1999/PRSBridge); PRS-CS [https://github.com/getian107/PRScs](https://github.com/getian107/PRScs); Plink 1.9 [https://www.cog-genomics.org/plink/](https://www.cog-genomics.org/plink/) and 2.0 [https://www.cog-genomics.org/plink/2.0/](https://www.cog-genomics.org/plink/2.0/); LDpred2 [https://privefl.github.io/bigsnpr/articles/LDpred2.html](https://privefl.github.io/bigsnpr/articles/LDpred2.html); LASSOSUM [https://github.com/tshmak/lassosum](https://github.com/tshmak/lassosum). Please follow the method’s tutorial to prepare the LD reference data, and place all LD-related files in the 'data/' directory.
+-   **External software:**  
+Download methods in the root directory and all LD-related files in the 'data/' directory.
+	- PRS-Bridge: [https://github.com/YuzhengDun1999/PRSBridge](https://github.com/YuzhengDun1999/PRSBridge); download all LD reference data for EUR population by following the instructions provided in the method’s GitHub tutorial.
+	- PRS-CS [https://github.com/getian107/PRScs](https://github.com/getian107/PRScs); download LD reference data for EUR population by following method's tutorial in github.
+	-  LASSOSUM: [https://github.com/tshmak/lassosum](https://github.com/tshmak/lassosum). 
+	- LDpred2: [https://privefl.github.io/bigsnpr/articles/LDpred2.html](https://privefl.github.io/bigsnpr/articles/LDpred2.html); download [HapMap3 variants with independent LD blocks](https://doi.org/10.6084/m9.figshare.19213299), this link can also be found in their tutorial.
+	- Plink 1.9 [https://www.cog-genomics.org/plink/](https://www.cog-genomics.org/plink/) and 2.0 [https://www.cog-genomics.org/plink/2.0/](https://www.cog-genomics.org/plink/2.0/).
 -   **Data:**  UK Biobank access for real trait analyses; synthetic data and summary statistics for disease traits public available.
 
 ## Data Download and Pre-process
