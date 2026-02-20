@@ -7,13 +7,18 @@ All the (bash) commands to reproduce the results should be run from the reposito
 
 ## Prerequisites
 -   **External software:**  
-    * PRS-Bridge [https://github.com/YuzhengDun1999/PRSBridge](https://github.com/YuzhengDun1999/PRSBridge)
-    * PRS-CS [https://github.com/getian107/PRScs](https://github.com/getian107/PRScs)
-    * Plink 1.9 [https://www.cog-genomics.org/plink/](https://www.cog-genomics.org/plink/) and 2.0 [https://www.cog-genomics.org/plink/2.0/](https://www.cog-genomics.org/plink/2.0/)
-    * LDpred2 [https://privefl.github.io/bigsnpr/articles/LDpred2.html](https://privefl.github.io/bigsnpr/articles/LDpred2.html)
-    * LASSOSUM [https://github.com/tshmak/lassosum](https://github.com/tshmak/lassosum). Please follow the method’s tutorial to prepare the LD reference data, and place all LD-related files in the 'data/' directory.
-    <br>_Does this last sentence only apply to Lassosum? Or did you mean "the methods' tutorials" for all the methods listed here?_
-
+Download methods in the root directory. 
+<br>_"Download methods in the root directory" makes no sense. 
+Did you mean something more like "Place downloaded software executable files in the root directory"? (Though this probably isn't quite right b/c many of the software packages don't come with executables.) Be more clear and explicit._ <br>
+The necessary LD-related files for the methods should be placed in the 'data/' directory.
+	- PRS-Bridge: [https://github.com/YuzhengDun1999/PRSBridge](https://github.com/YuzhengDun1999/PRSBridge) 
+    &mdash; download all LD reference data for EUR population by following the instructions provided in the tutorial in the GitHub repo.
+	- PRS-CS [https://github.com/getian107/PRScs](https://github.com/getian107/PRScs) 
+    &mdash; download LD reference data for EUR population by following method's tutorial in github.
+	-  LASSOSUM: [https://github.com/tshmak/lassosum](https://github.com/tshmak/lassosum). 
+	- LDpred2: [https://privefl.github.io/bigsnpr/articles/LDpred2.html](https://privefl.github.io/bigsnpr/articles/LDpred2.html) 
+    &mdash; download [HapMap3 variants with independent LD blocks](https://doi.org/10.6084/m9.figshare.19213299), this link can also be found in their tutorial.
+	- Plink 1.9 [https://www.cog-genomics.org/plink/](https://www.cog-genomics.org/plink/) and 2.0 [https://www.cog-genomics.org/plink/2.0/](https://www.cog-genomics.org/plink/2.0/).
 -   **Data access application:** Access to UK Biobank for real trait analyses. 
     (The synthetic data and the summary statistics for disease traits are public available.)
 
@@ -21,6 +26,7 @@ All the (bash) commands to reproduce the results should be run from the reposito
 -   **Synthetic data:**  
     Download from  [https://doi.org/10.7910/DVN/COXHAP](https://doi.org/10.7910/DVN/COXHAP).
 -   **Real data (disease traits):**
+Download the GWAS summary statistics for each trait and get access to the Individual-level genotype and phenotype data UK Biobank (application required). The individual-level data are used to evaluate each method. Run `Rscript process_continuous_dat.R TRAIT PATH_TO_PHENO PATH_TO_PSAM` to generate the corresponding GWAS summary statistics for each disease traits, as well as the disease status and covariate information for individuals. `TRAIT` is the name of the trait (defined in our code below). It must be the same in this whole pipeline. `PATH_TO_PHENO` should be the path to your UK Biobank phenotype file. The file must contain the following field IDs: 'f.eid', 'f.31.0.0', 'f.53.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', 'f.21000.0.0', as well as the fields starting with 'f.20001', 'f.20002', 'f.41270', and 'f.41280'. `PATH_TO_PSAM` should be the path to your UK Biobank '.psam' file. The '.psam' file from any chromosome is acceptable. The resulting GWAS summary statistics will be stored in the file '{TRAIT}/sumdat_Rcov.txt'. The phenotype and covariate information used for tuning and validation will be stored in 'tuning/{TRAIT}_cov.txt' and 'validation/{TRAIT}_cov.txt'.
     -   Breast Cancer: Use the link in [https://www.ccge.medschl.cam.ac.uk/breast-cancer-association-consortium-bcac/data-data-access/summary-results/gwas-summary-results](https://www.ccge.medschl.cam.ac.uk/breast-cancer-association-consortium-bcac/data-data-access/summary-results/gwas-summary-results) to download 'oncoarray_bcac_public_release_oct17.txt.gz'. After decompressing the file, place 'oncoarray_bcac_public_release_oct17.txt' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R BC` to get the processed summary statistics stored in `BC/sumdat_Rcov.txt`
     -    Coronary Artery disease: Download 'CARDIoGRAMplusC4D 1000 Genomes-based GWAS – Additive' from [https://cardiogramplusc4d.org/data-downloads/](https://cardiogramplusc4d.org/data-downloads/). Place 'cad.add.160614.website.txt' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R CAD` to get the processed summary statistics stored in `CAD/sumdat_Rcov.txt`
     -    Depression: Download from [https://doi.org/10.6084/m9.figshare.21655784](https://doi.org/10.6084/m9.figshare.21655784). Place 'daner_pgc_mdd_meta_w2_no23andMe_rmUKBB' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R Depression` to get the processed summary statistics stored in `Depression/sumdat_Rcov.txt`.
