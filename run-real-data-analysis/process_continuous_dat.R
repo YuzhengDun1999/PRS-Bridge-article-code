@@ -6,7 +6,7 @@ temp <- commandArgs(TRUE)
 trait = temp[1] # phenotype name, same for the whole pipeline
 field_id =  temp[2] # field ID of phenotype
 pheno = temp[3] # path to your phenotype file pheno.rds
-psam_path = temp[4] # path to your psam file of any chromosome, chr1.psam
+fam_path = temp[4] # path to your fam file of any chromosome, chr1.fam
 
 system(paste0("mkdir ", trait))
 system(paste0("mkdir tuning"))
@@ -16,7 +16,7 @@ dat = readRDS(pheno) ##### path to your UK Biobank phenotype data
 dat = dat[which(dat$f.22020 == "Yes"),] ##### only include independent EUR individuals
 dat = dat[which(dat$f.21000.0.0 %in% c("White", "British", "Irish", "Any other white background")),] 
 
-psam_chr1 <- bigreadr::fread2(psam_path) #### change to your path to genotype file
+fam_chr1 <- bigreadr::fread2(fam_path) #### change to your path to genotype file
 col_names <- colnames(dat)
 
 # first ten principal components
@@ -28,7 +28,7 @@ dat_sub <- dat[, all_columns_to_include]
 
 # rename the columns for readability
 colnames(dat_sub) = c("IID", "sex", "age", paste0("PC",1:10))
-cov = dat_sub %>% filter(IID %in% psam_chr1[,2])
+cov = dat_sub %>% filter(IID %in% fam_chr1[,2])
 cov = cbind(data.frame(FID = cov[,1]), cov)
 
 #### split data into training, tuning, and validation dataset

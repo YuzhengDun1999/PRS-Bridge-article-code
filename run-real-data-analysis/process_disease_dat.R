@@ -5,7 +5,7 @@ library(dplyr)
 temp <- commandArgs(TRUE)
 trait = temp[1] # phenotype name, same for the whole pipeline
 pheno = temp[2] # path to your phenotype file pheno.rds
-psam_path = temp[3] # path to your psam file of any chromosome, chr1.psam
+fam_path = temp[3] # path to your fam file of any chromosome, chr1.fam
 
 system(paste0("mkdir ", trait))
 
@@ -14,7 +14,7 @@ dat = readRDS(pheno) ##### path to your UK Biobank phenotype data
 dat = dat[which(dat$f.22020 == "Yes"),] ##### only include independent EUR individuals
 dat = dat[which(dat$f.21000.0.0 %in% c("White", "British", "Irish", "Any other white background")),] 
 
-psam_chr1 <- bigreadr::fread2(psam_path) #### change to your path to genotype file
+fam_chr1 <- bigreadr::fread2(fam_path) #### change to your path to genotype file
 col_names <- colnames(dat)
 
 # first ten principal components
@@ -22,7 +22,7 @@ top_ten_pc_col <- col_names[str_detect(col_names, "22009")][1:10]
 
 # select the columns to include covariate file
 all_columns_to_include <- c("f.eid", "f.31.0.0", "f.21022.0.0", top_ten_pc_col)
-dat = dat %>% filter(f.eid %in% psam_chr1[,2])
+dat = dat %>% filter(f.eid %in% fam_chr1[,2])
 dat$FID = dat$f.eid; dat$IID = dat$f.eid
 dat_sub <- dat[, all_columns_to_include]
 

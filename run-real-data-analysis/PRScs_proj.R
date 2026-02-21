@@ -44,7 +44,7 @@ for (ref in c("1kg", "ukbb")) {
     }
   }
   
-  run_all = paste0(-, "/", ref, "/PRScs_proj/run_sh/run_all.sh")
+  run_all = paste0(trait, "/", ref, "/PRScs_proj/run_sh/run_all.sh")
   sink(run_all)
   mem = 3
   for (run_sh_i in 1:length(run_sh_list)) {
