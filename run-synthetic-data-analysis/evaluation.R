@@ -27,7 +27,7 @@ result_dir = paste0(trait, "/", ref, "/", method, "/result/")
 result = data.frame(matrix(ncol = 5, nrow = 0))
 names(result) = c("seed", "alpha", "percent", "tuning_R2", "validation_R2"); result_i = 1
 
-cov = bigreadr::fread2(paste0('data/EUR_phen_rho_', rho, '_GA_',GA))
+cov = bigreadr::fread2(paste0('data/EUR_phen_rho_', rho, '_size_4_GA_',GA))
 cov = cov[100001:120000, c(1,3)]; names(cov) = c("IID", "y")
 for (alpha in alpha_list) {
   for (percent in percent_list) {
@@ -75,7 +75,7 @@ ref_N = "1kg"
 result_dir = paste0(trait, "/", ref_N, "/", method, "/result/")
 result = data.frame(matrix(ncol = 4, nrow = 0))
 names(result) = c("seed", "tune_i", "tuning_R2", "validation_R2"); result_i = 1
-cov = bigreadr::fread2(paste0('data/EUR_phen_rho_', rho, '_GA_',GA))
+cov = bigreadr::fread2(paste0('data/EUR_phen_rho_', rho, '_size_4_GA_',GA))
 cov = cov[100001:120000, c(1,3)]; names(cov) = c("IID", "y")
 
 for (x in 1:63) {
@@ -119,7 +119,7 @@ result_dir = paste0(trait, "/", ref, "/", method, "/result/")
 
 result = data.frame(matrix(ncol = 4, nrow = 0))
 names(result) = c("seed", "phi", "tuning_R2", "validation_R2"); result_i = 1
-cov = bigreadr::fread2(paste0('data/EUR_phen_rho_', rho, '_GA_',GA))
+cov = bigreadr::fread2(paste0('data/EUR_phen_rho_', rho, '_size_4_GA_',GA))
 cov = cov[100001:120000, c(1,3)]; names(cov) = c("IID", "y")
 
 for (phi_i in 1:length(phi_list)){  

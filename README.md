@@ -25,9 +25,10 @@ The necessary LD-related files for the methods should be placed in the 'data/' d
 
 ## Data Download and Pre-process
 -   **Synthetic data:**  
-    Download from  [https://doi.org/10.7910/DVN/COXHAP](https://doi.org/10.7910/DVN/COXHAP).
+Download the PLINK files (`.bim`, `.bed`, `.fam`) with the prefix `EUR_`, the phenotype files named `EUR_pheno_rho*_size_4_GA_{1,4,5}`, and the GWAS summary statistics files named `EUR_summary_rho*_size_4_GA_{1,4,5}` from  [https://doi.org/10.7910/DVN/COXHAP](https://doi.org/10.7910/DVN/COXHAP).
+
 -   **Real data (disease traits):**
-Download the GWAS summary statistics for each trait and get access to the Individual-level genotype and phenotype data UK Biobank (application required). The individual-level data are used to evaluate each method. Run `Rscript process_continuous_dat.R ${TRAIT} ${PATH_TO_PHENO} ${PATH_TO_FAM}` to generate the corresponding GWAS summary statistics for each disease traits, as well as the disease status and covariate information for individuals. 
+Download the GWAS summary statistics for each trait and get access to the Individual-level genotype and phenotype data UK Biobank (application required). The individual-level data are used to evaluate each method. Run `Rscript run-real-data-analysis/process_disease_dat.R ${TRAIT} ${PATH_TO_PHENO} ${PATH_TO_FAM}` to generate the corresponding GWAS summary statistics for each disease traits, as well as the disease status and covariate information for individuals. 
  `TRAIT` is a variable specifying the trait name, to be set as one of the following: `"BC"`, `"CAD"`, `"Depression"`, `"IBD"`, and `"RA"`. 
  `PATH_TO_PHENO` is a variable specifying the path to your UK Biobank phenotype file (in .rds format). The file must contain the following field IDs:  'f.eid', 'f.31.0.0', 'f.53.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', 'f.21000.0.0', as well as the fields starting with 'f.20001', 'f.20002', 'f.41270', and 'f.41280'. 
     <br>_Aki: Do you actually need `PATH_TO_FAM` here? I see that you changed it to `PATH_TO_GENO` for the instructions for continuous traits?
@@ -46,7 +47,7 @@ For coronary artery disease and inflammatory bowel disease, we obtained the orig
 
 -   **Real data (continuous traits):**
 	First apply for the access to the individual-level genotype and phenotype data from UK Biobank. 
-    Then run `Rscript process_continuous_dat.R ${TRAIT} ${FIELD_ID} ${PATH_TO_PHENO} ${PATH_TO_GENO}` to generate the corresponding GWAS summary statistics for each continuous trait. 
+    Then run `Rscript run-real-data-analysis/process_continuous_dat.R ${TRAIT} ${FIELD_ID} ${PATH_TO_PHENO} ${PATH_TO_GENO}` to generate the corresponding GWAS summary statistics for each continuous trait. 
     `TRAIT` is a variable specifying the trait name, to be set as one of the followings: `"BMI"`, `"RHR"`, `"HDL"`, `"LDL"`, `"APOEA"`, and `"APOEB"`. 
     `FIELD_ID` is a variable denoting the UK Biobank field ID corresponding to the specified `${TRAIT}` in the phenotype file.
     `PATH_TO_PHENO` is a variable specifying the path to your UK Biobank phenotype file (in .rds format). The file must contain the following field IDs: 'f.eid', 'f.31.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', and 'f.21000.0.0', as well as the field ID specified by `${FIELD_ID}`.
@@ -86,8 +87,8 @@ Under the `data` folder, we have provided a preprocessed sample dataset which ca
 `GA` is a variable specifying the genetic architecture. It takes values 1, 4, or 5, corresponding to strong negative selection, no negative selection, and mild negative selection, respectively. 
 The values of 2 and 3 correspond to multi-ancestry settings, which are not considered in our article. 
 These parameter choices are taken from the simulation settings of Zhang et al. (2023). Further information on the synthetic data can be found at: https://doi.org/10.7910/DVN/COXHAP. The processed GWAS summary statistics used as input for each method are stored in the directory: `rho${RHO}GA${GA}/sumdat/`.
-3. Run `sbatch run-synthetic-data-analysis/PRSBridge.sh ${RHO} ${GA}`, `sbatch run-synthetic-data-analysis/PRScs.R ${RHO} ${GA}`, and `Rscript run-synthetic-data-analysis/ldpred2.R ${RHO} ${GA} ${PATH_TO_1kg}`; the input parameters are the same as those in `process_synthetic_dat.R` and `PATH_TO_1kg` is a variable specifying the path to the 1kg individual-level genotype data used to construct the LD reference panel.
-4. Run `run-synthetic-data-analysis/evaluation.R ${RHO} ${GA}`; input parameters are the same as `process_synthetic_dat.R`.
+3. Run `sbatch run-synthetic-data-analysis/PRSBridge.sh ${RHO} ${GA}`, `sbatch run-synthetic-data-analysis/PRScs.sh ${RHO} ${GA}`, and `Rscript run-synthetic-data-analysis/ldpred2.R ${RHO} ${GA} ${PATH_TO_1kg}`; the input parameters are the same as those in `process_synthetic_dat.R` and `PATH_TO_1kg` is a variable specifying the path to the 1kg individual-level genotype data used to construct the LD reference panel.
+4. Run `Rscript run-synthetic-data-analysis/evaluation.R ${RHO} ${GA}`; input parameters are the same as `process_synthetic_dat.R`.
 5. Plot the results via `Rscript run-synthetic-data-analysis/plot.R`.
 
 
