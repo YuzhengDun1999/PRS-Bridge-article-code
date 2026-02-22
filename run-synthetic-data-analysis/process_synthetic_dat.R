@@ -14,7 +14,7 @@ temp <- commandArgs(TRUE)
 rho = as.numeric(temp[1]) ###### taking values in 1, 2, 3
 GA = as.numeric(temp[2]) ###### taking values in 1, 4, 5
 
-sumdat = bigreadr::fread2(paste0("EUR_summary_rho_", rho, "_size_4_GA_4"))
+sumdat = bigreadr::fread2(paste0("EUR_summary_rho_", rho, "_size_4_GA_", GA))
 for (chr in 1:22) {
   out_dir = paste0('rho', rho, 'GA', GA, '/sumdat/chr', chr, '/')
   sumdat_hm3 = sumdat[sumdat[,2]==chr, ]
