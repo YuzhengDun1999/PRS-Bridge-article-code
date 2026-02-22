@@ -2,6 +2,7 @@
 temp <- commandArgs(TRUE)
 trait = temp[1] # phenotype name, same for the whole pipeline
 outcome = temp[2]
+bfile = temp[3]
 
 source("evaluation/evaluation_metrics.R")
 
@@ -11,9 +12,7 @@ for (ref_N in c("1kg", 'ukbb', 'Nblk')) {
   
   method = 'ldpred2'
   result_dir = paste0(trait, '/ldpred2/')
-  ### for tuning calculate prs
   for (chr in c(1:22)) {
-    bfile = paste0('validation/tuning/chr', chr)
     for (x in 1:63) {
       prs_output = paste0(result_dir, 'chr', chr, '/ldpred2effect-hm3-EUR-ref_', ref_N, '_prs_', x,'.txt')
       if(file.exists(paste0(result_dir, 'chr', chr, '/ldpred2effect-hm3-EUR-ref_', ref_N, '_x_', x, '.txt'))){
@@ -26,8 +25,8 @@ for (ref_N in c("1kg", 'ukbb', 'Nblk')) {
     }
   }
   
-  cov = rbind(bigreadr::fread2(paste0('validation/tuning/', trait, '_cov.txt')),
-              bigreadr::fread2(paste0('validation/validation/', trait, '_cov.txt')))
+  cov = rbind(bigreadr::fread2(paste0('tuning/', trait, '_cov.txt')),
+              bigreadr::fread2(paste0('validation/', trait, '_cov.txt')))
   cov = cov %>% select(-FID)
   names(cov) = c("IID", paste0("PC", 1:10), "age", "sex", "y")
   result = data.frame(matrix(ncol = 4, nrow = 0))

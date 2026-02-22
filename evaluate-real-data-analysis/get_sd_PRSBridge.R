@@ -2,6 +2,7 @@
 temp <- commandArgs(TRUE)
 trait = temp[1] # phenotype name, same for the whole pipeline
 outcome = temp[2]
+bfile = temp[3]
 
 source("evaluation/evaluation_metrics.R")
 
@@ -20,18 +21,9 @@ for (LD_size in c("small", "large")) {
     for (chr in c(1:22)) {
       for (alpha_i in 1:length(alpha_list)) {
         for (percent_i in 1:length(percent_list)) {
-          bfile = paste0('tuning/chr', chr) #### path to your tuning bfile
           alpha = alpha_list[alpha_i]; percent = percent_list[percent_i]
           output_dir = paste0(result_dir, "chr", chr, "/percent",percent,"/alpha",alpha)
           prs_output = paste0(output_dir, '/prsresult.txt')
-          prsscore = paste0(output_dir, '/coef.txt')
-          prscode = paste(paste0('plink'),
-                          paste0('--score ', prsscore),
-                          paste0(' 1 3 4 sum --bfile ', bfile),
-                          paste0(' --out ', prs_output))
-          system(prscode)
-          bfile = paste0('validation/chr', chr) #### path to your validation bfile
-          prs_output = paste0(output_dir, '/prsresult_validation.txt')
           prsscore = paste0(output_dir, '/coef.txt')
           prscode = paste(paste0('plink'),
                           paste0('--score ', prsscore),
@@ -53,8 +45,7 @@ for (LD_size in c("small", "large")) {
       for (percent in percent_list) {
         cov$PRS = 0
         for (chr in 1:22) {
-          PRS = rbind(bigreadr::fread2(paste0(result_dir, "chr", chr, "/percent", percent, "/alpha", alpha, "/prsresult.txt.profile")),
-                      bigreadr::fread2(paste0(result_dir, "chr", chr, "/percent", percent, "/alpha", alpha, "/prsresult_validation.txt.profile")))
+          PRS = rbind(bigreadr::fread2(paste0(result_dir, "chr", chr, "/percent", percent, "/alpha", alpha, "/prsresult.txt.profile")))
           cov = merge(cov, PRS %>% select(IID, SCORESUM), by = "IID") %>% mutate(PRS = PRS + SCORESUM) %>% select(-SCORESUM)
         }
         for (seed in 1:100) {
@@ -86,18 +77,9 @@ for (LD_size in c("small", "large")) {
     for (chr in c(1:22)) {
       for (alpha_i in 1:length(alpha_list)) {
         for (percent_i in 1:length(percent_list)) {
-          bfile = paste0('validation/tuning/chr', chr)
           alpha = alpha_list[alpha_i]; percent = percent_list[percent_i]
           output_dir = paste0(result_dir, "chr", chr, "/percent",percent,"/alpha",alpha)
           prs_output = paste0(output_dir, '/prsresult.txt')
-          prsscore = paste0(output_dir, '/coef.txt')
-          prscode = paste(paste0('plink'),
-                          paste0('--score ', prsscore),
-                          paste0(' 1 3 4 sum --bfile ', bfile),
-                          paste0(' --out ', prs_output))
-          system(prscode)
-          bfile = paste0('validation/validation/chr', chr)
-          prs_output = paste0(output_dir, '/prsresult_validation.txt')
           prsscore = paste0(output_dir, '/coef.txt')
           prscode = paste(paste0('plink'),
                           paste0('--score ', prsscore),
@@ -119,8 +101,7 @@ for (LD_size in c("small", "large")) {
       for (percent in percent_list) {
         cov$PRS = 0
         for (chr in 1:22) {
-          PRS = rbind(bigreadr::fread2(paste0(result_dir, "chr", chr, "/percent", percent, "/alpha", alpha, "/prsresult.txt.profile")),
-                      bigreadr::fread2(paste0(result_dir, "chr", chr, "/percent", percent, "/alpha", alpha, "/prsresult_validation.txt.profile")))
+          PRS = rbind(bigreadr::fread2(paste0(result_dir, "chr", chr, "/percent", percent, "/alpha", alpha, "/prsresult.txt.profile")))
           cov = merge(cov, PRS %>% select(IID, SCORESUM), by = "IID") %>% mutate(PRS = PRS + SCORESUM) %>% select(-SCORESUM)
         }
         for (seed in 1:10) {

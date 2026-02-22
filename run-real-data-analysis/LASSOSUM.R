@@ -34,15 +34,4 @@ for (chr in 1:22) {
   bigreadr::fwrite2(beta, paste0(trait, '/LASSOSUM/chr', chr, '/LASSOSUMeffect-hm3-EUR-ref_N', ref_N, '.txt'), sep = '\t')
   
   
-  prscode = paste(paste0('plink2'),
-                  paste0('--score ', trait, '/LASSOSUM/chr', chr, '/LASSOSUMeffect-hm3-EUR-ref_N', ref_N, '.txt'),
-                  paste0(' 1 3 cols=+scoresums,-scoreavgs --score-col-nums 4-83 --bfile tuning/chr', chr),
-                  paste0(' --out ', trait, '/LASSOSUM/chr', chr, "/ref_N", ref_N, "validation"))
-  system(prscode)
-  
-  prscode = paste(paste0('plink2'),
-                  paste0('--score ', trait, '/LASSOSUM/chr', chr, '/LASSOSUMeffect-hm3-EUR-ref_N', ref_N, '.txt'),
-                  paste0(' 1 3 cols=+scoresums,-scoreavgs --score-col-nums 4-83 --bfile validation/chr', chr),
-                  paste0(' --out ', trait, '/LASSOSUM/chr', chr, "/ref_N", ref_N, "tuning"))
-  system(prscode)
 }

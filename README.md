@@ -1,5 +1,6 @@
 
 
+
 # PRS-Bridge-article-code
 
 This repository contains instructions and scripts to reproduce all the synthetic and real data analysis results in the PRS-Bridge article, benchmarking the following methods: PRS-Bridge, LDpred2, LASSOSUM, and PRS-CS, PRS-CS-Projection, PRS-CS-threshold, and PRS-CS-Regularized.
@@ -28,9 +29,10 @@ The necessary LD-related files for the methods should be placed in the 'data/' d
 -   **Real data (disease traits):**
 Download the GWAS summary statistics for each trait and get access to the Individual-level genotype and phenotype data UK Biobank (application required). The individual-level data are used to evaluate each method. Run `Rscript process_continuous_dat.R ${TRAIT} ${PATH_TO_PHENO} ${PATH_TO_FAM}` to generate the corresponding GWAS summary statistics for each disease traits, as well as the disease status and covariate information for individuals. 
  `TRAIT` is a variable specifying the trait name, to be set as one of the following: `"BC"`, `"CAD"`, `"Depression"`, `"IBD"`, and `"RA"`. 
- `PATH_TO_PHENO` is a variable specifying the path to your UK Biobank phenotype file. The file must contain the following field IDs:  'f.eid', 'f.31.0.0', 'f.53.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', 'f.21000.0.0', as well as the fields starting with 'f.20001', 'f.20002', 'f.41270', and 'f.41280'. 
-    <br>_Aki: Do you actually need `PATH_TO_FAM` here? I see that you changed it to `PATH_TO_GENO` for the instructions for continuous traits?_
-    `PATH_TO_FAM` is a variable specifying the path to your UK Biobank '.fam' file. The '.fam' file contains the individual-level sample ID information and is required by PLINK.
+ `PATH_TO_PHENO` is a variable specifying the path to your UK Biobank phenotype file (in .rds format). The file must contain the following field IDs:  'f.eid', 'f.31.0.0', 'f.53.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', 'f.21000.0.0', as well as the fields starting with 'f.20001', 'f.20002', 'f.41270', and 'f.41280'. 
+    <br>_Aki: Do you actually need `PATH_TO_FAM` here? I see that you changed it to `PATH_TO_GENO` for the instructions for continuous traits?
+    Yes, `fam` contains the individual-level sample ID, `.bim` file contains information about genetic variants (including SNP ID, location, reference alleles, alternative alleles), `.bed` file contains genetic information for each individual. Not all individuals in UK Biobank has genotype files. When we extract disease information and split data into tuning and validation, we need to focus on individuals with genotype files. In this case, we only need `.fam` files to get the individual-level sample ID with genetic information. For continuous traits, we need the all PLINK files to get GWAS summary statistics. That's why I change it to PATH_TO_GENO for continuous traits._
+    `PATH_TO_FAM` is a variable specifying the path to your UK Biobank PLINK '.fam' file. The '.fam' file contains the individual-level sample ID information and is used to exclude samples without genotype information.
     The '.fam' file from any chromosome is acceptable. 
     The resulting GWAS summary statistics will be stored in the file `${TRAIT}/sumdat_Rcov.txt`. The phenotype and covariate information used for tuning and validation will be stored in `tuning/${TRAIT}_cov.txt` and `validation/${TRAIT}_cov.txt`.
     -   Breast Cancer: Use the link in [https://www.ccge.medschl.cam.ac.uk/breast-cancer-association-consortium-bcac/data-data-access/summary-results/gwas-summary-results](https://www.ccge.medschl.cam.ac.uk/breast-cancer-association-consortium-bcac/data-data-access/summary-results/gwas-summary-results) and download 'oncoarray_bcac_public_release_oct17.txt.gz'. After decompressing the file, place the text file 'oncoarray_bcac_public_release_oct17.txt' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R BC ${PATH_TO_PHENO} ${PATH_TO_FAM}` to get the processed summary statistics stored in `BC/sumdat_Rcov.txt`
@@ -39,25 +41,25 @@ Download the GWAS summary statistics for each trait and get access to the Indivi
     -    Inflammatory Bowel Disease: Download 'Latest combined GWAS and Immunochip trans-ancestry' from [https://www.ibdgenetics.org/](https://www.ibdgenetics.org/). Place the text file 'EUR.IBD.gwas_info03_filtered.assoc' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R IBD ${PATH_TO_PHENO} ${PATH_TO_FAM}` to get the processed summary statistics stored in `IBD/sumdat_Rcov.txt`.
      -    Rheumatoid Arthritis: Download 'Eurpean RA GWAS meta-analysis' from [http://plaza.umin.ac.jp/~yokada/datasource/files/GWASMetaResults/RA_GWASmeta_European_v2.txt.gz](http://plaza.umin.ac.jp/~yokada/datasource/files/GWASMetaResults/RA_GWASmeta_European_v2.txt.gz). Place the text file 'RA_GWASmeta_European_v2.txt.gz' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R RA ${PATH_TO_PHENO} ${PATH_TO_FAM}` to get the processed summary statistics stored in `RA/sumdat_Rcov.txt`.
 
-    _Yuzheng: For CAD, I have no idea why the summary statistics cannot be downloaded now. It can be directly downloaded several years ago. I find this in their website and I do not know if this is the reason: Please note that CARDIoGRAMplusC4D is currently undertaking the analyses listed under [Ongoing Projects](https://cardiogramplusc4d.org/ongoing-projects/), please contact the relevant PI if you wish to discuss collaborating. Can I just revise the ACC form and move CAD summary statistics to data needed request? This issue is same for inflammatory bowel disease. In their original website, it will appear 'This link has been deleted' if you click the original link._ <br>
-    _Aki: If the original datasets were publicly available, can you just re-post your copy of CAD and IBD in a public data repository? (You could even post all the dataset there.)_
+**Note:** 
+For coronary artery disease and inflammatory bowel disease, we obtained the original GWAS datasets in 2022. These datasets are no longer publicly available as of February 2026. The corresponding references are provided in Table 1 of the manuscript. Interested researchers may contact the corresponding authors of the original studies to request access.
 
 -   **Real data (continuous traits):**
 	First apply for the access to the individual-level genotype and phenotype data from UK Biobank. 
     Then run `Rscript process_continuous_dat.R ${TRAIT} ${FIELD_ID} ${PATH_TO_PHENO} ${PATH_TO_GENO}` to generate the corresponding GWAS summary statistics for each continuous trait. 
     `TRAIT` is a variable specifying the trait name, to be set as one of the followings: `"BMI"`, `"RHR"`, `"HDL"`, `"LDL"`, `"APOEA"`, and `"APOEB"`. 
     `FIELD_ID` is a variable denoting the UK Biobank field ID corresponding to the specified `${TRAIT}` in the phenotype file.
-    `PATH_TO_PHENO` is a variable specifying the path to your UK Biobank phenotype file. The file must contain the following field IDs: 'f.eid', 'f.31.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', and 'f.21000.0.0', as well as the field specified by the second input parameter.
-    `PATH_TO_GENO` is a variable specifying the path to the folder containing your UK Biobank PLINK files ('.bim', '.bed', '.fam'), which together encapsulate individual-level genotype data.
-    <br>_Aki: Did you really mean "the path prefix" (i.e. the files are named like `${PATH_TO_GENO}main_filename.bim`). On the other hand, "the path to the folder containing" would mean your files are found at `${PATH_TO_GENO}/filename.bim`._)
+    `PATH_TO_PHENO` is a variable specifying the path to your UK Biobank phenotype file (in .rds format). The file must contain the following field IDs: 'f.eid', 'f.31.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', and 'f.21000.0.0', as well as the field ID specified by `${FIELD_ID}`.
+    `PATH_TO_GENO` is a variable specifying the PLINK file prefix (without the `.bed/.bim/.fam` extensions) containing your UK Biobank PLINK files ('.bim', '.bed', '.fam'), which together encapsulate individual-level genotype data.
+    <br>_Aki: Did you really mean "the path prefix" (i.e. the files are named like `${PATH_TO_GENO}main_filename.bim`). On the other hand, "the path to the folder containing" would mean your files are found at `${PATH_TO_GENO}/filename.bim`.
+    I am not sure if different groups will use different prefix to store PLINK file. I want to user to specify `${PATH_TO_GENO}.bim`, `${PATH_TO_GENO}.fam`, `${PATH_TO_GENO}.bed`. The prefix is the same for these three files._)
     The resulting GWAS summary statistics will be stored in the file `${TRAIT}/sumdat_Rcov.txt`. The phenotype and covariate information used for tuning and validation will be stored in `tuning/${TRAIT}_cov.txt` and `validation/${TRAIT}_cov.txt`.
-    <br>_Aki: Did you forget to update `PATH_TO_FAM` to `PATH_TO_GENO` below?_
-     -    BMI: Run `Rscript run-real-data-analysis/process_continuous_dat.R BMI f.21001.0.0 ${PATH_TO_PHENO} ${PATH_TO_FAM}`. 
-     -    Resting Heart Rate: Run `Rscript process_continuous_dat.R RHR f.102.0.0 ${PATH_TO_PHENO} ${PATH_TO_FAM}`. 
-     -    High-density lipoprotein: Run `Rscript run-real-data-analysis/process_continuous_dat.R HDL f.30760.0.0 ${PATH_TO_PHENO} ${PATH_TO_FAM}`.
-     -    Low-density lipoprotein: Run `Rscript run-real-data-analysis/process_continuous_dat.R LDL f.30780.0.0 ${PATH_TO_PHENO} ${PATH_TO_FAM}`.
-     -    Apolipoprotein A: Run `Rscript run-real-data-analysis/process_continuous_dat.R APOEA f.30630.0.0 ${PATH_TO_PHENO} ${PATH_TO_FAM}`.
-     -    Apolipoprotein B: Run `Rscript run-real-data-analysis/process_continuous_dat.R APOEB f.30640.0.0 ${PATH_TO_PHENO} ${PATH_TO_FAM}`.
+     -    BMI: Run `Rscript run-real-data-analysis/process_continuous_dat.R BMI f.21001.0.0 ${PATH_TO_PHENO} ${PATH_TO_GENO}`. 
+     -    Resting Heart Rate: Run `Rscript process_continuous_dat.R RHR f.102.0.0 ${PATH_TO_PHENO} ${PATH_TO_GENO}`. 
+     -    High-density lipoprotein: Run `Rscript run-real-data-analysis/process_continuous_dat.R HDL f.30760.0.0 ${PATH_TO_PHENO} ${PATH_TO_GENO}`.
+     -    Low-density lipoprotein: Run `Rscript run-real-data-analysis/process_continuous_dat.R LDL f.30780.0.0 ${PATH_TO_PHENO} ${PATH_TO_GENO}`.
+     -    Apolipoprotein A: Run `Rscript run-real-data-analysis/process_continuous_dat.R APOEA f.30630.0.0 ${PATH_TO_PHENO} ${PATH_TO_GENO}`.
+     -    Apolipoprotein B: Run `Rscript run-real-data-analysis/process_continuous_dat.R APOEB f.30640.0.0 ${PATH_TO_PHENO} ${PATH_TO_GENO}`.
 
 To reproduce the numerical results via the steps outlined below, all the downloaded files should be place in the root directory of this GitHub directory.
 
@@ -74,9 +76,8 @@ The resulting MCMC output will be stored in the file `data/coef_proj_pst_eff_a1_
 3. Plot the result via `Rscript plot-results/plot_figure1.R`.
 
 **Note:** 
-Under the `data` folder, we have provided a preprocessed sample dataset which can be directly used to run the version of PRS-CS without the ad hoc constraint on Chromosome 22 and generate the MCMC samples as plotted in Figure 1 of the manuscript.
+Under the `data` folder, we have provided a preprocessed sample dataset which can be directly used to reproduce Figure 1 following the above steps.
 
-_Aki: You can use the sample dataset to run all the steps above, right? If so, then just say "Under the `data` folder, we have provided a preprocessed sample dataset that can be used to reproduce Figure 1 following the above steps."_
 
 
 ### Synthetic Data Results
@@ -92,20 +93,18 @@ These parameter choices are taken from the simulation settings of Zhang et al. (
 
 ### Real Data Results
 Due to the computational efforts involved, reproducing the full results in a reasonable amount of time requires running the tasks in parallel on a high-performance computing cluster.
-We therefore provide R scripts that generate a set of bash scripts to be submitted to a cluster using Simple Linux Utility for Resource Management (SLURM).
-<br>_Aki: Update the descriptions here as appropriate._
-The commands for running each method are specified within the generated .sh files. For LASSOSUM and ldpred2, we also provide scripts for directly running the methods, though we recommend similarly executing them on an HPC system.
+We therefore provide bash scripts for PRS-Bridge and for PRS-CS and its extensions to be submitted to a cluster using Simple Linux Utility for Resource Management (SLURM). For LASSOSUM and ldpred2, we also provide scripts for directly running the methods, though we recommend similarly executing them on an HPC system.
 1. Run the quality control step via `Rscript run-real-data-analysis/sumdat_QC.R ${TRAIT}`, where `TRAIT` is the same variable as the input parameter specified in the section "Data Download and Pre-process" section.
 This will generate files in the directory `${TRAIT}/data/`.
 2.  Run the PRS methods on the preprocessed data:
      -   Lassosum: Run `Rscript run-real-data-analysis/LASSOSUM.R ${TRAIT} ${PATH_TO_1kg} 1kg` and `Rscript run-real-data-analysis/LASSOSUM.R ${TRAIT} ${PATH_TO_UKBB} ukbb`, where  `TRAIT` is the same input parameter specified in the previous step; `PATH_TO_1kg` and `PATH_TO_UKBB` are variables specifying the paths to the individual-level genotype data used to construct the corresponding LD reference panels. This will generate coefficients in the directory `${TRAIT}/LASSOSUM/`.
-     -   LDpred2: Run `Rscript run-real-data-analysis/ldpred2.R ${TRAIT} ${PATH_TO_1kg} 1kg`, `Rscript run-real-data-analysis/ldpred2.R ${TRAIT} ${PATH_TO_UKBB} ukbb`, and `Rscript run-real-data-analysis/ldpred2.R ${TRAIT} ${PATH_TO_BLK} NBlk`, where  `TRAIT` is the same input parameter specified in the previous step; `PATH_TO_1kg` and `PATH_TO_UKBB` are variables specifying the paths to the individual-level genotype data used to construct the corresponding LD reference panels; `PATH_TO_BLK` is a variable specifying path to the downloaded LD reference data with independent block. Please see LDpred2 tutorial for how to process it. This will generate coefficients in the directory `${TRAIT}/chr{1..22}/`.
+     -   LDpred2: Run `Rscript run-real-data-analysis/ldpred2.R ${TRAIT} ${PATH_TO_1kg} 1kg`, `Rscript run-real-data-analysis/ldpred2.R ${TRAIT} ${PATH_TO_UKBB} ukbb`, and `Rscript run-real-data-analysis/ldpred2.R ${TRAIT} ${PATH_TO_BLK} NBlk`, where  `TRAIT` is the same input parameter specified in the previous step; `PATH_TO_1kg` and `PATH_TO_UKBB` are variables specifying the paths to the individual-level genotype data used to construct the corresponding LD reference panels; `PATH_TO_BLK` is a variable specifying path to the downloaded LD reference data with independent block. This will generate coefficients in the directory `${TRAIT}/chr{1..22}/`.
      -   PRS-CS and its extensions: Run `sbatch run-real-data-analysis/${method}.sh ${TRAIT}`, where  `TRAIT` is the same input parameter specified in the previous step, and `${method}` can be chosen from `PRScs` (PRS-CS), `PRScs_proj` (PRS-CS-Projection), `PRScs_regularized` (PRS-CS-Regularized), `PRScs_threshold` (PRS-CS-threshold). This command submits SLURM array jobs to run PRS-CS and its extensions in parallel. The coefficients will be stored in the directory `${TRAIT}/1kg/${method}/result` and `${TRAIT}/ukbb/${method}/result`.
      -   PRS-Bridge: Run `sbatch run-real-data-analysis/PRSBridge.sh ${TRAIT}`, where  `TRAIT` is the same input parameter specified in the previous step. This command submits SLURM array jobs to run PRS-Bridge in parallel. The coefficients will be stored in the directory `${TRAIT}/1kg/Bridge_small`,  `${TRAIT}/1kg/Bridge_large`, `${TRAIT}/ukbb/Bridge_small` and `${TRAIT}/ukbb/Bridge_large`.
  
  
 ### Evaluate and Plot Real Data Analysis Results
-Having run all the methods on all the datasets, evaluate the performance of each methods via `Rscript evaluate-real-data-analysis/get_sd_${method_name}.R ${TRAIT} ${OUTCOME}` where `${method_name}` can be chosen from `PRSBridge`, `ldpred2`, `PRScs`, `PRScs_proj`, `PRScs_regularized`, `PRScs_threshold`, and `ldpred2`; `TRAIT` is the same input parameter specified in the previous step; `OUTCOME` is a variable taking values in 'continuous' for continuous traits and 'disease' for disease traits. The performance for each method will be stored in `${TRAIT}/result`. After evaluating all methods on all traits, the methods' performances relative to Lassosum can be summarized by running `Rscript evaluate-real-data-analysis/RE_lassosum.R`. The resulting file will be stored in root directory.
+Having run all the methods on all the datasets, evaluate the performance of each methods via `Rscript evaluate-real-data-analysis/get_sd_${method_name}.R ${TRAIT} ${OUTCOME} ${PATH_TO_GENO}` where `${method_name}` can be chosen from `PRSBridge`, `ldpred2`, `PRScs`, `PRScs_proj`, `PRScs_regularized`, `PRScs_threshold`, and `ldpred2`; `TRAIT` is the same input parameter specified in the previous step; `OUTCOME` is a variable taking values in 'continuous' for continuous traits and 'disease' for disease traits; `PATH_TO_GENO` is a variable specifying the PLINK file prefix (without the `.bed/.bim/.fam` extensions) containing your UK Biobank PLINK files ('.bim', '.bed', '.fam'), which together encapsulate individual-level genotype data. The performance for each method will be stored in `${TRAIT}/result`. After evaluating all methods on all traits, the methods' performances relative to Lassosum can be summarized by running `Rscript evaluate-real-data-analysis/RE_lassosum.R`. The resulting file will be stored in root directory.
 
 Finally, the results can be graphically summarized via `Rscript plot-result/plot.R`, which reproduces Figure 4 and 5.
 The other figures in the main manuscript and the supplement can similarly be reproduced by running appropriate scripts under the `plot-result/` folder.

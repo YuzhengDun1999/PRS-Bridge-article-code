@@ -2,6 +2,7 @@
 temp <- commandArgs(TRUE)
 trait = temp[1] # phenotype name, same for the whole pipeline
 outcome = temp[2]
+bfile = temp[3]
 
 source("evaluation/evaluation_metrics.R")
 
@@ -21,15 +22,7 @@ for (ref in Ref) {
       for (phi_i in 1:length(phi_list)) {
         for (threshold in threshold_list) {
           result_dir = paste0(trait, "/", ref, "/", method, "/result/")
-          bfile = paste0('validation/validation/chr', chr)
           phi = phi_list[phi_i]; name = name_list[phi_i]
-          prs_output = paste0(result_dir, "/threshold", threshold, '/chr', chr, '_pst_eff_a', a, '_b0.5_phi', name, '_chr', chr, '_validation_prs.txt')
-          prscode = paste(paste0('plink'),
-                          paste0('--score ', result_dir, "/threshold", threshold, '/chr', chr, '_pst_eff_a', a, '_b0.5_phi', name, '_chr', chr, '.txt'),
-                          paste0(' 2 5 6 sum --bfile ', bfile),
-                          paste0(' --out ', prs_output))
-          system(prscode)
-          bfile = paste0('validation/tuning/chr', chr)
           prs_output = paste0(result_dir, "/threshold", threshold, '/chr', chr, '_pst_eff_a', a, '_b0.5_phi', name, '_chr', chr, '_prs.txt')
           prscode = paste(paste0('plink'),
                           paste0('--score ', result_dir, "/threshold", threshold, '/chr', chr, '_pst_eff_a', a, '_b0.5_phi', name, '_chr', chr, '.txt'),
@@ -41,8 +34,8 @@ for (ref in Ref) {
     }
     
     library(dplyr)
-    cov = rbind(bigreadr::fread2(paste0('validation/tuning/', trait, '_cov.txt')),
-                bigreadr::fread2(paste0('validation/validation/', trait, '_cov.txt')))
+    cov = rbind(bigreadr::fread2(paste0('tuning/', trait, '_cov.txt')),
+                bigreadr::fread2(paste0('validation/', trait, '_cov.txt')))
     cov = cov %>% select(-FID)
     names(cov) = c("IID", paste0("PC", 1:10), "age", "sex", "y")
     result = data.frame(matrix(ncol = 5, nrow = 0))
@@ -52,8 +45,7 @@ for (ref in Ref) {
         phi = phi_list[phi_i]; name = name_list[phi_i]
         cov$PRS = 0
         for (chr in 1:22) {
-          PRS = rbind(bigreadr::fread2(paste0(result_dir, "/threshold", threshold, '/chr', chr, '_pst_eff_a', a, '_b0.5_phi', name, '_chr', chr, "_prs.txt.profile")),
-                      bigreadr::fread2(paste0(result_dir, "/threshold", threshold, '/chr', chr, '_pst_eff_a', a, '_b0.5_phi', name, '_chr', chr, "_validation_prs.txt.profile")))
+          PRS = rbind(bigreadr::fread2(paste0(result_dir, "/threshold", threshold, '/chr', chr, '_pst_eff_a', a, '_b0.5_phi', name, '_chr', chr, "_prs.txt.profile")))
           cov = merge(cov, PRS %>% select(IID, SCORESUM), by = "IID") %>% mutate(PRS = PRS + SCORESUM) %>% select(-SCORESUM)
         }
         for (seed in 1:100) {
