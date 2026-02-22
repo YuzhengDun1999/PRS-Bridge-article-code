@@ -78,7 +78,7 @@ Under the `data` folder, we have provided a preprocessed sample dataset which ca
 `RHO` is a variable specifying the proportion of causal SNPs. It takes values 1, 2, or 3, corresponding to causal SNP proportions of 0.01, 0.001, and 0.0005, respectively. 
 `GA` is a variable specifying the genetic architecture. It takes values 1, 4, or 5, corresponding to strong negative selection, no negative selection, and mild negative selection, respectively. We use only these three values because codes 2 and 3 in the original manuscript generating simulation dataset correspond to different settings in multi-ethnic scenarios. In our manuscript, we consider only the single-ancestry setting.
 These parameter choices are taken from the simulation settings of Zhang et al. (2023). Further information on the synthetic data can be found at: https://doi.org/10.7910/DVN/COXHAP. The processed GWAS summary statistics used as input for each method are stored in the directory: `rho${RHO}GA${GA}/sumdat/`.
-3. Run `Rscript run-synthetic-data-analysis/PRSBridge.R ${RHO} ${GA}`, `Rscript run-synthetic-data-analysis/PRScs.R ${RHO} ${GA}`, and `Rscript run-synthetic-data-analysis/ldpred2.R ${RHO} ${GA} ${PATH_TO_1kg}`; the input parameters are the same as those in `process_synthetic_dat.R` and `PATH_TO_1kg` is a variable specifying the path to the 1kg individual-level genotype data used to construct the LD reference panel.
+3. Run `sbatch run-synthetic-data-analysis/PRSBridge.sh ${RHO} ${GA}`, `Rscript run-synthetic-data-analysis/PRScs.R ${RHO} ${GA}`, and `Rscript run-synthetic-data-analysis/ldpred2.R ${RHO} ${GA} ${PATH_TO_1kg}`; the input parameters are the same as those in `process_synthetic_dat.R` and `PATH_TO_1kg` is a variable specifying the path to the 1kg individual-level genotype data used to construct the LD reference panel.
 4. Run `run-synthetic-data-analysis/evaluation.R ${RHO} ${GA}`; input parameters are the same as `process_synthetic_dat.R`.
 5. Plot the results via `Rscript run-synthetic-data-analysis/plot.R`.
 
@@ -96,7 +96,7 @@ This will generate files in the directory `${TRAIT}/data/`.
      <br>_How could jobs be "automatically submitted" (without a user doing anything)? This is confusing.
      Yuzheng: I run system("sbatch --mem=5G run-PRScs.sh") in R script files. In my analysis, I just run the R script file and .sh file will be automatically submitted on JHPCE._ <br>
      The coefficients will be stored in the directory `${TRAIT}/1kg/${method}/result` and `${TRAIT}/ukbb/${method}/result`.
-     -   PRS-Bridge: Run `Rscript run-real-data-analysis/PRSBridge.R ${TRAIT}`, where  `TRAIT` is the same input parameter specified in the previous step. This will generate a brunch of script files to run PRS-Bridge in the directory `${TRAIT}/1kg/Bridge_small/run_sh`,  `${TRAIT}/1kg/Bridge_large/run_sh`, `${TRAIT}/ukbb/Bridge_small/run_sh` and `${TRAIT}/ukbb/Bridge_large/run_sh`. The jobs will then be automatically submitted via SLURM. The coefficients will be stored in the directory `${TRAIT}/1kg/Bridge_small`,  `${TRAIT}/1kg/Bridge_large`, `${TRAIT}/ukbb/Bridge_small` and `${TRAIT}/ukbb/Bridge_large`.
+     -   PRS-Bridge: Run `sbatch run-real-data-analysis/PRSBridge.sh ${TRAIT}` to run jobs parallelly via SLURM, where  `TRAIT` is the same input parameter specified in the previous step. The coefficients will be stored in the directory `${TRAIT}/1kg/Bridge_small`,  `${TRAIT}/1kg/Bridge_large`, `${TRAIT}/ukbb/Bridge_small` and `${TRAIT}/ukbb/Bridge_large`.
  
  
 ### Evaluate and Plot Real Data Analysis Results
