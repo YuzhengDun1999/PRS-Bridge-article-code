@@ -6,7 +6,7 @@ temp <- commandArgs(TRUE)
 trait = temp[1] # phenotype name, same for the whole pipeline
 field_id =  temp[2] # field ID of phenotype
 pheno = temp[3] # path to your phenotype file pheno.rds
-fam_path = temp[4] # path to your fam file of any chromosome, chr1.fam
+geno_path = temp[4] # path to your genotype files
 
 system(paste0("mkdir ", trait))
 system(paste0("mkdir tuning"))
@@ -16,7 +16,7 @@ dat = readRDS(pheno) ##### path to your UK Biobank phenotype data
 dat = dat[which(dat$f.22020 == "Yes"),] ##### only include independent EUR individuals
 dat = dat[which(dat$f.21000.0.0 %in% c("White", "British", "Irish", "Any other white background")),] 
 
-fam_chr1 <- bigreadr::fread2(fam_path) #### change to your path to genotype file
+fam_chr1 <- bigreadr::fread2(paste0(geno_path, ".fam")) #### change to your path to genotype file
 col_names <- colnames(dat)
 
 # first ten principal components
@@ -59,7 +59,7 @@ readr::write_tsv(cov_valid, paste0('validation/', trait, '_cov.txt'))
 
 ### run GWAS
 GWAS_code = paste(paste0('plink2'),
-                  paste0(' --bfile allchr'), #### path to your genotype file
+                  paste0(' --bfile ', geno_path), #### path to your genotype file
                   paste0(' --pheno ', trait, '/pheno.txt '),
                   paste0(' --covar ', trait, '/training_cov.txt  --snps-only '),
                   paste0(' --glm --hwe 1e-07 --geno 0.05  --mind 0.05 --maf 0.01 --mach-r2-filter 0.8 2 '),
@@ -67,7 +67,7 @@ GWAS_code = paste(paste0('plink2'),
 system(prscode)
 ### calculate minor allele frequency
 GWAS_code = paste(paste0('plink2'),
-                  paste0(' --bfile allchr'), #### path to your genotype file
+                  paste0(' --bfile ', geno_path), #### path to your genotype file
                   paste0(' --freq --hwe 1e-07 --geno 0.05  --mind 0.05 --maf 0.01 --mach-r2-filter 0.8 2 '),
                   paste0(' --out ', trait, '/MAF'))
 system(prscode)

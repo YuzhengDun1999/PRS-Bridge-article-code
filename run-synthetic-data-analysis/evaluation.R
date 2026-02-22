@@ -27,13 +27,13 @@ result_dir = paste0(trait, "/", ref, "/", method, "/result/")
 result = data.frame(matrix(ncol = 5, nrow = 0))
 names(result) = c("seed", "alpha", "percent", "tuning_R2", "validation_R2"); result_i = 1
 
-cov = bigreadr::fread2(paste0('EUR_phen_rho_', rho, '_GA_',GA))
+cov = bigreadr::fread2(paste0('data/EUR_phen_rho_', rho, '_GA_',GA))
 cov = cov[100001:120000, c(1,3)]; names(cov) = c("IID", "y")
 for (alpha in alpha_list) {
   for (percent in percent_list) {
     cov$PRS = 0
     for (chr in 1:22) {
-      bfile = paste0('validation/EUR_chr', chr) #### path to your validation simulated bfile
+      bfile = paste0('data/EUR_chr', chr) #### path to your validation simulated bfile
       alpha = alpha_list[alpha_i]; percent = percent_list[percent_i]
       output_dir = paste0(result_dir, "chr", chr, "/percent",percent,"/alpha",alpha)
       prs_output = paste0(output_dir, '/prsresult.txt')
@@ -75,13 +75,13 @@ ref_N = "1kg"
 result_dir = paste0(trait, "/", ref_N, "/", method, "/result/")
 result = data.frame(matrix(ncol = 4, nrow = 0))
 names(result) = c("seed", "tune_i", "tuning_R2", "validation_R2"); result_i = 1
-cov = bigreadr::fread2(paste0('EUR_phen_rho_', rho, '_GA_',GA))
+cov = bigreadr::fread2(paste0('data/EUR_phen_rho_', rho, '_GA_',GA))
 cov = cov[100001:120000, c(1,3)]; names(cov) = c("IID", "y")
 
 for (x in 1:63) {
   cov$PRS = 0
   for (chr in 1:22) {
-    bfile = paste0('validation/EUR_chr', chr) #### path to your validation simulated bfile
+    bfile = paste0('data/EUR_chr', chr) #### path to your validation simulated bfile
     prs_output = paste0(result_dir, 'chr', chr, '/ldpred2effect-hm3-EUR-ref_', ref_N, '_prs_', x,'.txt')
     prscode = paste(paste0('plink'),
                     paste0('--score ', result_dir, 'chr', chr, '/ldpred2effect-hm3-EUR-ref_', ref_N, '_x_', x, '.txt'),
@@ -119,14 +119,14 @@ result_dir = paste0(trait, "/", ref, "/", method, "/result/")
 
 result = data.frame(matrix(ncol = 4, nrow = 0))
 names(result) = c("seed", "phi", "tuning_R2", "validation_R2"); result_i = 1
-cov = bigreadr::fread2(paste0('EUR_phen_rho_', rho, '_GA_',GA))
+cov = bigreadr::fread2(paste0('data/EUR_phen_rho_', rho, '_GA_',GA))
 cov = cov[100001:120000, c(1,3)]; names(cov) = c("IID", "y")
 
 for (phi_i in 1:length(phi_list)){  
   phi = phi_list[phi_i]; name = name_list[phi_i]
   cov$PRS = 0
   for (chr in 1:22) {
-    bfile = paste0('validation/EUR_chr', chr) #### path to your validation simulated bfile
+    bfile = paste0('data/EUR_chr', chr) #### path to your validation simulated bfile
     phi = phi_list[phi_i]; name = name_list[phi_i]
     prs_output = paste0(result_dir, '/chr', chr, '_pst_eff_a1_b0.5_phi', name, '_chr', chr, '_prs.txt')
     prscode = paste(paste0('plink'),
