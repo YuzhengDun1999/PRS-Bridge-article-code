@@ -29,6 +29,7 @@ The necessary LD-related files for the methods should be placed in the 'data/' d
 Download the GWAS summary statistics for each trait and get access to the Individual-level genotype and phenotype data UK Biobank (application required). The individual-level data are used to evaluate each method. Run `Rscript process_continuous_dat.R ${TRAIT} ${PATH_TO_PHENO} ${PATH_TO_FAM}` to generate the corresponding GWAS summary statistics for each disease traits, as well as the disease status and covariate information for individuals. 
  `TRAIT` is a variable specifying the trait name, to be set as one of the following: `"BC"`, `"CAD"`, `"Depression"`, `"IBD"`, and `"RA"`. 
  `PATH_TO_PHENO` is a variable specifying the path to your UK Biobank phenotype file. The file must contain the following field IDs:  'f.eid', 'f.31.0.0', 'f.53.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', 'f.21000.0.0', as well as the fields starting with 'f.20001', 'f.20002', 'f.41270', and 'f.41280'. 
+    <br>_Aki: Do you actually need `PATH_TO_FAM` here? I see that you changed it to `PATH_TO_GENO` for the instructions for continuous traits?_
     `PATH_TO_FAM` is a variable specifying the path to your UK Biobank '.fam' file. The '.fam' file contains the individual-level sample ID information and is required by PLINK.
     The '.fam' file from any chromosome is acceptable. 
     The resulting GWAS summary statistics will be stored in the file `${TRAIT}/sumdat_Rcov.txt`. The phenotype and covariate information used for tuning and validation will be stored in `tuning/${TRAIT}_cov.txt` and `validation/${TRAIT}_cov.txt`.
@@ -47,8 +48,10 @@ Download the GWAS summary statistics for each trait and get access to the Indivi
     `TRAIT` is a variable specifying the trait name, to be set as one of the followings: `"BMI"`, `"RHR"`, `"HDL"`, `"LDL"`, `"APOEA"`, and `"APOEB"`. 
     `FIELD_ID` is a variable denoting the UK Biobank field ID corresponding to the specified `${TRAIT}` in the phenotype file.
     `PATH_TO_PHENO` is a variable specifying the path to your UK Biobank phenotype file. The file must contain the following field IDs: 'f.eid', 'f.31.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', and 'f.21000.0.0', as well as the field specified by the second input parameter.
-    `PATH_TO_GENO` is a variable specifying the path prefix to your UK Biobank PLINK file ('.bim', '.bed', '.fam'). These files contains individual-level genotype data.
+    `PATH_TO_GENO` is a variable specifying the path to the folder containing your UK Biobank PLINK files ('.bim', '.bed', '.fam'), which together encapsulate individual-level genotype data.
+    <br>_Aki: Did you really mean "the path prefix" (i.e. the files are named like `${PATH_TO_GENO}main_filename.bim`). On the other hand, "the path to the folder containing" would mean your files are found at `${PATH_TO_GENO}/filename.bim`._)
     The resulting GWAS summary statistics will be stored in the file `${TRAIT}/sumdat_Rcov.txt`. The phenotype and covariate information used for tuning and validation will be stored in `tuning/${TRAIT}_cov.txt` and `validation/${TRAIT}_cov.txt`.
+    <br>_Aki: Did you forget to update `PATH_TO_FAM` to `PATH_TO_GENO` below?_
      -    BMI: Run `Rscript run-real-data-analysis/process_continuous_dat.R BMI f.21001.0.0 ${PATH_TO_PHENO} ${PATH_TO_FAM}`. 
      -    Resting Heart Rate: Run `Rscript process_continuous_dat.R RHR f.102.0.0 ${PATH_TO_PHENO} ${PATH_TO_FAM}`. 
      -    High-density lipoprotein: Run `Rscript run-real-data-analysis/process_continuous_dat.R HDL f.30760.0.0 ${PATH_TO_PHENO} ${PATH_TO_FAM}`.
@@ -90,6 +93,7 @@ These parameter choices are taken from the simulation settings of Zhang et al. (
 ### Real Data Results
 Due to the computational efforts involved, reproducing the full results in a reasonable amount of time requires running the tasks in parallel on a high-performance computing cluster.
 We therefore provide R scripts that generate a set of bash scripts to be submitted to a cluster using Simple Linux Utility for Resource Management (SLURM).
+<br>_Aki: Update the descriptions here as appropriate._
 The commands for running each method are specified within the generated .sh files. For LASSOSUM and ldpred2, we also provide scripts for directly running the methods, though we recommend similarly executing them on an HPC system.
 1. Run the quality control step via `Rscript run-real-data-analysis/sumdat_QC.R ${TRAIT}`, where `TRAIT` is the same variable as the input parameter specified in the section "Data Download and Pre-process" section.
 This will generate files in the directory `${TRAIT}/data/`.
