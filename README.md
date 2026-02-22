@@ -43,12 +43,11 @@ Download the GWAS summary statistics for each trait and get access to the Indivi
 
 -   **Real data (continuous traits):**
 	First apply for the access to the individual-level genotype and phenotype data from UK Biobank. 
-    Then run `Rscript process_continuous_dat.R ${TRAIT} ${FIELD_ID} ${PATH_TO_PHENO} ${PATH_TO_FAM}` to generate the corresponding GWAS summary statistics for each continuous trait. 
+    Then run `Rscript process_continuous_dat.R ${TRAIT} ${FIELD_ID} ${PATH_TO_PHENO} ${PATH_TO_GENO}` to generate the corresponding GWAS summary statistics for each continuous trait. 
     `TRAIT` is a variable specifying the trait name, to be set as one of the followings: `"BMI"`, `"RHR"`, `"HDL"`, `"LDL"`, `"APOEA"`, and `"APOEB"`. 
     `FIELD_ID` is a variable denoting the UK Biobank field ID corresponding to the specified `${TRAIT}` in the phenotype file.
     `PATH_TO_PHENO` is a variable specifying the path to your UK Biobank phenotype file. The file must contain the following field IDs: 'f.eid', 'f.31.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', and 'f.21000.0.0', as well as the field specified by the second input parameter.
-    <br>_Aki: What does the "second input parameter" mean? Clarify._
-    `PATH_TO_FAM` is a variable specifying the path to your UK Biobank '.fam' file. The '.fam' file contains the individual-level sample ID information and is required by PLINK. The '.fam' file from any chromosome is acceptable. 
+    `PATH_TO_GENO` is a variable specifying the path prefix to your UK Biobank PLINK file ('.bim', '.bed', '.fam'). These files contains individual-level genotype data.
     The resulting GWAS summary statistics will be stored in the file `${TRAIT}/sumdat_Rcov.txt`. The phenotype and covariate information used for tuning and validation will be stored in `tuning/${TRAIT}_cov.txt` and `validation/${TRAIT}_cov.txt`.
      -    BMI: Run `Rscript run-real-data-analysis/process_continuous_dat.R BMI f.21001.0.0 ${PATH_TO_PHENO} ${PATH_TO_FAM}`. 
      -    Resting Heart Rate: Run `Rscript process_continuous_dat.R RHR f.102.0.0 ${PATH_TO_PHENO} ${PATH_TO_FAM}`. 
@@ -83,7 +82,7 @@ _Aki: You can use the sample dataset to run all the steps above, right? If so, t
 `GA` is a variable specifying the genetic architecture. It takes values 1, 4, or 5, corresponding to strong negative selection, no negative selection, and mild negative selection, respectively. 
 The values of 2 and 3 correspond to multi-ancestry settings, which are not considered in our article. 
 These parameter choices are taken from the simulation settings of Zhang et al. (2023). Further information on the synthetic data can be found at: https://doi.org/10.7910/DVN/COXHAP. The processed GWAS summary statistics used as input for each method are stored in the directory: `rho${RHO}GA${GA}/sumdat/`.
-3. Run `Rscript run-synthetic-data-analysis/PRSBridge.R ${RHO} ${GA}`, `Rscript run-synthetic-data-analysis/PRScs.R ${RHO} ${GA}`, and `Rscript run-synthetic-data-analysis/ldpred2.R ${RHO} ${GA} ${PATH_TO_1kg}`; the input parameters are the same as those in `process_synthetic_dat.R` and `PATH_TO_1kg` is a variable specifying the path to the 1kg individual-level genotype data used to construct the LD reference panel.
+3. Run `sbatch run-synthetic-data-analysis/PRSBridge.sh ${RHO} ${GA}`, `sbatch run-synthetic-data-analysis/PRScs.R ${RHO} ${GA}`, and `Rscript run-synthetic-data-analysis/ldpred2.R ${RHO} ${GA} ${PATH_TO_1kg}`; the input parameters are the same as those in `process_synthetic_dat.R` and `PATH_TO_1kg` is a variable specifying the path to the 1kg individual-level genotype data used to construct the LD reference panel.
 4. Run `run-synthetic-data-analysis/evaluation.R ${RHO} ${GA}`; input parameters are the same as `process_synthetic_dat.R`.
 5. Plot the results via `Rscript run-synthetic-data-analysis/plot.R`.
 
@@ -97,13 +96,8 @@ This will generate files in the directory `${TRAIT}/data/`.
 2.  Run the PRS methods on the preprocessed data:
      -   Lassosum: Run `Rscript run-real-data-analysis/LASSOSUM.R ${TRAIT} ${PATH_TO_1kg} 1kg` and `Rscript run-real-data-analysis/LASSOSUM.R ${TRAIT} ${PATH_TO_UKBB} ukbb`, where  `TRAIT` is the same input parameter specified in the previous step; `PATH_TO_1kg` and `PATH_TO_UKBB` are variables specifying the paths to the individual-level genotype data used to construct the corresponding LD reference panels. This will generate coefficients in the directory `${TRAIT}/LASSOSUM/`.
      -   LDpred2: Run `Rscript run-real-data-analysis/ldpred2.R ${TRAIT} ${PATH_TO_1kg} 1kg`, `Rscript run-real-data-analysis/ldpred2.R ${TRAIT} ${PATH_TO_UKBB} ukbb`, and `Rscript run-real-data-analysis/ldpred2.R ${TRAIT} ${PATH_TO_BLK} NBlk`, where  `TRAIT` is the same input parameter specified in the previous step; `PATH_TO_1kg` and `PATH_TO_UKBB` are variables specifying the paths to the individual-level genotype data used to construct the corresponding LD reference panels; `PATH_TO_BLK` is a variable specifying path to the downloaded LD reference data with independent block. Please see LDpred2 tutorial for how to process it. This will generate coefficients in the directory `${TRAIT}/chr{1..22}/`.
-     -   PRS-CS and its extensions: Run `Rscript run-real-data-analysis/${method}.R ${TRAIT}`, where  `TRAIT` is the same input parameter specified in the previous step, and `${method}` can be chosen from `PRScs` (PRS-CS), `PRScs_proj` (PRS-CS-Projection), `PRScs_regularized` (PRS-CS-Regularized), `PRScs_threshold` (PRS-CS-threshold). This will generate a brunch of script files to run PRS-CS and its extensions in the directory `${TRAIT}/1kg/${method}/run_sh` and `${TRAIT}/ukbb/${method}/run_sh`. 
-     <br>_The reason you use an Rscript to generate bash scripts is for the same reasons as you described below for PRS-CS needing the GWAS sample size info?_ <br>
-     The jobs will then be automatically submitted via SLURM. 
-     <br>_How could jobs be "automatically submitted" (without a user doing anything)? This is confusing.
-     Yuzheng: I run system("sbatch --mem=5G run-PRScs.sh") in R script files. In my analysis, I just run the R script file and .sh file will be automatically submitted on JHPCE._ <br>
-     The coefficients will be stored in the directory `${TRAIT}/1kg/${method}/result` and `${TRAIT}/ukbb/${method}/result`.
-     -   PRS-Bridge: Run `Rscript run-real-data-analysis/PRSBridge.R ${TRAIT}`, where  `TRAIT` is the same input parameter specified in the previous step. This will generate a brunch of script files to run PRS-Bridge in the directory `${TRAIT}/1kg/Bridge_small/run_sh`,  `${TRAIT}/1kg/Bridge_large/run_sh`, `${TRAIT}/ukbb/Bridge_small/run_sh` and `${TRAIT}/ukbb/Bridge_large/run_sh`. The jobs will then be automatically submitted via SLURM. The coefficients will be stored in the directory `${TRAIT}/1kg/Bridge_small`,  `${TRAIT}/1kg/Bridge_large`, `${TRAIT}/ukbb/Bridge_small` and `${TRAIT}/ukbb/Bridge_large`.
+     -   PRS-CS and its extensions: Run `sbatch run-real-data-analysis/${method}.sh ${TRAIT}`, where  `TRAIT` is the same input parameter specified in the previous step, and `${method}` can be chosen from `PRScs` (PRS-CS), `PRScs_proj` (PRS-CS-Projection), `PRScs_regularized` (PRS-CS-Regularized), `PRScs_threshold` (PRS-CS-threshold). This command submits SLURM array jobs to run PRS-CS and its extensions in parallel. The coefficients will be stored in the directory `${TRAIT}/1kg/${method}/result` and `${TRAIT}/ukbb/${method}/result`.
+     -   PRS-Bridge: Run `sbatch run-real-data-analysis/PRSBridge.sh ${TRAIT}`, where  `TRAIT` is the same input parameter specified in the previous step. This command submits SLURM array jobs to run PRS-Bridge in parallel. The coefficients will be stored in the directory `${TRAIT}/1kg/Bridge_small`,  `${TRAIT}/1kg/Bridge_large`, `${TRAIT}/ukbb/Bridge_small` and `${TRAIT}/ukbb/Bridge_large`.
  
  
 ### Evaluate and Plot Real Data Analysis Results
@@ -130,11 +124,6 @@ The files included are:
 See section "PRS-CS's Non-convergence Behavior in the Absence of the Ad-hoc Constraint on Prior Variance (Figure 1)" for example usage.
 - `PRScs_threshold.py`: Implements versions of PRS-CS modified to use different values of the upper threshold on the prior variance. 
 Example usage: `python PRS-CS-proj/PRScs_threshold.py --ref_dir=data/ldblk_1kg_eur --bim_prefix=data/chr22  --sst_file=data/PRScs_sumdat.txt --n_gwas=284389 --out_dir=data/coef_threshold --chrom=22 --phi=1e-04 --seed=1 --threshold=0.1`.
-<br>_(I don't understand why you need to have a user run this R scripts to generate the bash scripts.
-Why can't you just directly provide the bash scripts generated by this R script and place them in a folder `slurm_scripts/`, for example?
-You can then just provide a bash command, e.g. `sbatch ...`, to submit the simulations to SLURM.
-That way, it is far more transparent what steps are involved in generating the results.)
-Yuzheng: PRS-CS needs the GWAS sample size as input (a scalar). Different traits and different SNPs have different sample sizes (missing rate for different SNPs are different). Instead of manually setting the sample size. I use R script to automatically calculate the mean sample size across SNPs and then use that as input. If the current pipeline will be acceptable by the reviewer, I will keep the current._ 
 -   `PRScs_proj.py`: Implements versions of PRS-CS modified to use projected summary statistics. 
 See section "PRS-CS's Non-convergence Behavior in the Absence of the Ad-hoc Constraint on Prior Variance (Figure 1)" for example usage.
 -   `PRScs_Regularized.py`: Implements versions of PRS-CS modified to use Regularized LD matrix. 

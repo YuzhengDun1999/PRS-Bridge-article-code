@@ -5,7 +5,7 @@ library(dplyr)
 temp <- commandArgs(TRUE)
 trait = temp[1] # phenotype name, same for the whole pipeline
 pheno = temp[2] # path to your phenotype file pheno.rds
-fam_path = temp[3] # path to your fam file of any chromosome, chr1.fam
+geno_path = temp[3] # path to your genotype file
 
 system(paste0("mkdir ", trait))
 
@@ -14,7 +14,7 @@ dat = readRDS(pheno) ##### path to your UK Biobank phenotype data
 dat = dat[which(dat$f.22020 == "Yes"),] ##### only include independent EUR individuals
 dat = dat[which(dat$f.21000.0.0 %in% c("White", "British", "Irish", "Any other white background")),] 
 
-fam_chr1 <- bigreadr::fread2(fam_path) #### change to your path to genotype file
+fam_chr1 <- bigreadr::fread2(paste0(geno_path, ".fam")) #### change to your path to genotype file
 col_names <- colnames(dat)
 
 # first ten principal components
