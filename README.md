@@ -76,6 +76,11 @@ Under the `data` folder, we have provided a preprocessed sample dataset which ca
 
 
 ### Synthetic Data Results
+
+Due to the computational efforts involved, reproducing the full results in a reasonable amount of time requires running the tasks in parallel on a computing cluster.
+For PRS-Bridge and PRS-CS, therefore, we provide bash scripts to run the methods by submitting them via `sbatch` to a cluster operating under Simple Linux Utility for Resource Management (SLURM). 
+For LASSOSUM and ldpred2, we provide R scripts for directly running the methods, though we recommend similarly executing them on a computing cluster.
+
 1.  Run `Rscript run-synthetic-data-analysis/process_synthetic_dat.R ${RHO} ${GA}` to preprocess the GWAS summary statistics under the settings as specified by the variables `RHO` and `GA`. 
 `RHO` is a variable specifying the proportion of causal SNPs. It takes values 1, 2, or 3, corresponding to causal SNP proportions of 0.01, 0.001, and 0.0005, respectively. 
 `GA` is a variable specifying the genetic architecture. It takes values 1, 4, or 5, corresponding to strong negative selection, no negative selection, and mild negative selection, respectively. 
@@ -87,8 +92,10 @@ These parameter choices are taken from the simulation settings of Zhang et al. (
 
 
 ### Real Data Results
-Due to the computational efforts involved, reproducing the full results in a reasonable amount of time requires running the tasks in parallel on a high-performance computing cluster.
-We therefore provide bash scripts for PRS-Bridge and for PRS-CS and its extensions to be submitted to a cluster using Simple Linux Utility for Resource Management (SLURM). For LASSOSUM and ldpred2, we also provide scripts for directly running the methods, though we recommend similarly executing them on an HPC system.
+
+As with the synthetic data results, reproducing the full results here requires significant computational efforts.
+Therefore, for PRS-Bridge, PRS-CS, and its modifications, we provide bash scripts to submit the tasks to a computing cluster via `sbatch`. 
+
 1. Run the quality control step via `Rscript run-real-data-analysis/sumdat_QC.R ${TRAIT}`, where the variable `TRAIT` is as described in the "Data Download and Pre-process" section.
 The resulting files will be stored in the directory `${TRAIT}/data/`.
 2.  Run the PRS methods on the preprocessed data:
