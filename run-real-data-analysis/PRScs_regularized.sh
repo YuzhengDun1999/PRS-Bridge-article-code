@@ -86,7 +86,8 @@ if [[ "${phi}" == "0" ]]; then
     --out_dir="${outdir}" \
     --a="${a}" \
     --chrom="${chr}" \
-    --regularized="${regularized}"
+    --regularized="${regularized}" \
+    --seed=1
 else
   python PRS-CS-proj/PRScs_Regularized.py \
     --ref_dir="${ref_dir}" \
@@ -97,5 +98,6 @@ else
     --a="${a}" \
     --chrom="${chr}" \
     --phi="${phi}" \
-    --regularized="${regularized}"
+    --regularized="${regularized}" \
+    --seed=1
 fi

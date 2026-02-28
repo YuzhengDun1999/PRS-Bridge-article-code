@@ -84,7 +84,8 @@ if [[ "${phi}" == "0" ]]; then
     --out_dir="${outdir}" \
     --a="${a}" \
     --chrom="${chr}" \
-    --threshold="${threshold}"
+    --threshold="${threshold}" \
+    --seed=1
 else
   python PRS-CS-proj/PRScs_threshold.py \
     --ref_dir="${ref_dir}" \
@@ -95,5 +96,6 @@ else
     --a="${a}" \
     --chrom="${chr}" \
     --phi="${phi}" \
-    --threshold="${threshold}"
+    --threshold="${threshold}" \
+    --seed=1
 fi

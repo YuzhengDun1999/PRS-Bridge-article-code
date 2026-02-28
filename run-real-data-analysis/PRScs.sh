@@ -85,7 +85,8 @@ if [[ "${phi}" == "0" ]]; then
     --n_gwas="${N}" \
     --out_dir="${outdir}" \
     --a="${a}" \
-    --chrom="${chr}"
+    --chrom="${chr}" \
+    --seed=1
 else
   python PRScs/PRScs.py \
     --ref_dir="${ref_dir}" \
@@ -95,5 +96,6 @@ else
     --out_dir="${outdir}" \
     --a="${a}" \
     --chrom="${chr}" \
-    --phi="${phi}"
+    --phi="${phi}" \
+    --seed=1
 fi
