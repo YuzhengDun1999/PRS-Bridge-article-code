@@ -75,7 +75,7 @@ if [[ "${phi}" == "0" ]]; then
 else
   python PRScs/PRScs.py \
     --ref_dir="${REF_DIR}" \
-    --bim_prefix="data/chr${chr}" \
+    --bim_prefix="data/EUR_chr${chr}" \
     --sst_file="${sumdat}" \
     --n_gwas=100000 \
     --out_dir="${outdir}" \
