@@ -10,7 +10,8 @@
 
 set -euo pipefail
 
-trait="${1:?Usage: sbatch PRScs.sh TRAIT}"
+trait="${1:?Usage: sbatch PRScs.sh TRAIT GENO}"
+geno="${2:?Usage: sbatch PRScs.sh TRAIT GENO}"
 
 # -----------------------------
 # Create output directories (like the R script)
@@ -80,7 +81,7 @@ echo "outdir  : ${outdir}"
 if [[ "${phi}" == "0" ]]; then
   python PRScs/PRScs.py \
     --ref_dir="${ref_dir}" \
-    --bim_prefix="chr${chr}" \
+    --bim_prefix="${geno}" \
     --sst_file="${sumdat}" \
     --n_gwas="${N}" \
     --out_dir="${outdir}" \
@@ -90,7 +91,7 @@ if [[ "${phi}" == "0" ]]; then
 else
   python PRScs/PRScs.py \
     --ref_dir="${ref_dir}" \
-    --bim_prefix="chr${chr}" \
+    --bim_prefix="${geno}" \
     --sst_file="${sumdat}" \
     --n_gwas="${N}" \
     --out_dir="${outdir}" \
