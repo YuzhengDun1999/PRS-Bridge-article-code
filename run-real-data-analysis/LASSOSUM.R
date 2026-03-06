@@ -14,14 +14,13 @@ for (chr in 1:22) {
   sumdat = sum.raw[sum.raw$CHR == chr, ]
   ref.bfile = paste0(ref, "/chr", chr) # path to your LD reference file, has to be individual level data
   
-  test.bfile <- paste0("tuning/chr", chr)
   LDblocks <- "EUR.hg19"
   cl <- makeCluster(2, type="FORK")
   sumdat$PVAL[sumdat$PVAL < .Machine$double.xmin] = .Machine$double.xmin * 10
   cor <- p2cor(p = as.numeric(sumdat$PVAL), n = as.numeric(sumdat$N), sign=sumdat$BETA)
   cor[is.na(cor)] = max(abs(cor), na.rm = TRUE) * sign(sumdat$BETA[is.na(cor)])
   out <- lassosum.pipeline(cor=cor, chr=sumdat$CHR, snp=sumdat$SNP_ID, A1=sumdat$ALT, A2=sumdat$REF,
-                           ref.bfile=ref.bfile, test.bfile=test.bfile, LDblocks = LDblocks, cluster=cl,
+                           ref.bfile=ref.bfile, test.bfile=ref.bfile, LDblocks = LDblocks, cluster=cl,
                            destandardize = TRUE)
   beta = out$sumstats[,c(2, 3, 4)]
   for (i in 1:length(out$beta)) {
