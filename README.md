@@ -12,16 +12,26 @@ All the (bash) commands to reproduce the results should be run from the reposito
 Download PRS-Bridge, PRS-CS, PLINK 1.9, and PLINK 2.0 from the links below and place the packages and executable files in the root directory. 
 Install LASSOSUM and LDpred2 in R according to the instructions in their respective tutorials.
 The necessary LD-related files for the methods should be placed in the 'data/' directory.
-	- PRS-Bridge: [https://github.com/YuzhengDun1999/PRSBridge](https://github.com/YuzhengDun1999/PRSBridge). 
-    <br> Additionally, download all LD reference data for EUR population by following the instructions provided in the software tutorial.
+	- PRS-Bridge: [https://github.com/YuzhengDun1999/PRSBridge](https://github.com/YuzhengDun1999/PRSBridge).
+	<br> Additionally, download pre-estimated LD matrices for EUR population required by PRS-Bridge using the following links: 
+		- [1000 Genomes Small Block](https://zenodo.org/records/18706275); `tar -zxvf ref_1kg.tar.gz`
+		- [UK Biobank Large Block](https://zenodo.org/records/18706275); `tar -zxvf ref_ukbb_large.tar.gz`
+		- [1000 Genomes Large Block](https://zenodo.org/records/18673493); `tar -zxvf ref_1kg_large.tar.gz`
+		- [UK Biobank Small Block](https://zenodo.org/records/18673493 "AFR reference"); `tar -zxvf ref_ukbb.tar.gz`
 	- PRS-CS [https://github.com/getian107/PRScs](https://github.com/getian107/PRScs).
-    <br> Additionally, download LD reference data for EUR population by following the software tutorial.
+		<br> Additionally, download pre-estimated LD matrices for EUR population required by PRS-CS using the following links: 
+		- [UK Biobank ](https://www.dropbox.com/s/t9opx2ty6ucrpib/ldblk_ukbb_eur.tar.gz?dl=0 "EUR reference"); `tar -zxvf ldblk_ukbb_eur.tar.gz`
+		- [1000 Genomes](https://www.dropbox.com/s/mt6var0z96vb6fv/ldblk_1kg_eur.tar.gz?dl=0 "EUR reference") ;`tar -zxvf ldblk_1kg_eur.tar.gz`
 	-  LASSOSUM: [https://github.com/tshmak/lassosum](https://github.com/tshmak/lassosum). 
 	- LDpred2: [https://privefl.github.io/bigsnpr/articles/LDpred2.html](https://privefl.github.io/bigsnpr/articles/LDpred2.html).
-    <br> Additionally, download [HapMap3 variants with independent LD blocks](https://doi.org/10.6084/m9.figshare.19213299).
+    <br> Additionally, download pre-estimated LD matrix with block structure required by LDpred2 using the following link: [HapMap3 variants with independent LD blocks](https://doi.org/10.6084/m9.figshare.19213299).
 	- Plink 1.9 [https://www.cog-genomics.org/plink/](https://www.cog-genomics.org/plink/) and 2.0 [https://www.cog-genomics.org/plink/2.0/](https://www.cog-genomics.org/plink/2.0/).
 -   **Data access application:** Access to UK Biobank for real trait analyses. 
     (The synthetic data and the summary statistics for disease traits are public available.)
+
+**Note:** 
+We do not maintain the download links for the pre-estimated LD matrices required by LDpred2 and PRS-CS. If a link has expired, please refer to the corresponding method’s website for the latest download links.
+
 
 ## Data Download and Pre-process
 -   **Synthetic data:**  
