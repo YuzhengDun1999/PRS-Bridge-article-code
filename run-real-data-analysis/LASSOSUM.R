@@ -1,7 +1,7 @@
 ########### This script is used to run LASSOSUM #############
 library(lassosum)
 library(parallel)
-setwd(system.file("data", package="lassosum")) # Directory where data and LD region files are stored
+#setwd(system.file("data", package="lassosum")) # Directory where data and LD region files are stored
 library(data.table)
 temp <- commandArgs(TRUE)
 trait = temp[1] # phenotype name, same for the whole pipeline
@@ -9,7 +9,7 @@ ref = temp[2]
 ref_N = temp[3] # can be 1kg and individuals from UKBB data
 
 for (chr in 1:22) {
-  sum.raw = bigreadr::fread2(paste0(trait, '/sumdat_Rcov.txt'))
+  sum.raw = bigreadr::fread2(paste0(trait, '/sumdat.txt'))
   sum.raw = as.data.frame(sum.raw)
   sumdat = sum.raw[sum.raw$CHR == chr, ]
   ref.bfile = paste0(ref, "/chr", chr) # path to your LD reference file, has to be individual level data

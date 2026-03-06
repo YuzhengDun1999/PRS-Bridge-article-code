@@ -104,7 +104,7 @@ for (LD_size in c("small", "large")) {
           PRS = rbind(bigreadr::fread2(paste0(result_dir, "chr", chr, "/percent", percent, "/alpha", alpha, "/prsresult.txt.profile")))
           cov = merge(cov, PRS %>% select(IID, SCORESUM), by = "IID") %>% mutate(PRS = PRS + SCORESUM) %>% select(-SCORESUM)
         }
-        for (seed in 1:10) {
+        for (seed in 1:100) {
           set.seed(seed)
           idx = sample(1:nrow(cov), size = round(nrow(cov) / 2))
           tuning = cov[idx, ]; validation = cov[-idx, ]

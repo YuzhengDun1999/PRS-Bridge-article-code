@@ -4,12 +4,13 @@ trait = temp[1] # phenotype name, same for the whole pipeline
 ref = temp[2]
 ref_N = temp[3]
 
+system(paste0("mkdir -p ", trait, "/chr{1..22}"))
 library(bigsnpr)
 if (ref_N == "ukbb" | ref_N == "1kg") {
   
   ldr = 3/1000
   for (chr in 1:22) {
-    sum.raw = bigreadr::fread2((paste0(trait, '/sumdat_Rcov.txt')))
+    sum.raw = bigreadr::fread2((paste0(trait, '/sumdat.txt')))
     sum.raw = as.data.frame(sum.raw)
     
     # ------------------------ Run LDpred2
@@ -56,14 +57,14 @@ if (ref_N == "ukbb" | ref_N == "1kg") {
     beta_grid = cbind(info_snp$rsid, info_snp$a0, info_snp$a1, beta_grid)
     colnames(beta_grid) = c(c('marker.ID', 'a0', 'a1'),paste0('e',1:nrow(params)))
     
-    bigreadr::fwrite2(beta_grid, paste0(trait, '/chr', chr,'/ldpred2effect-hm3-EUR-ref_N', ref_N, '.txt'), sep='\t')
+    bigreadr::fwrite2(beta_grid, paste0(trait, '/chr', chr,'/ldpred2effect-hm3-EUR-ref_', ref_N, '.txt'), sep='\t')
   }
 }
 
 ############### run ldpred2 using blked################
 if (ref_N == "Nblk") {
   for (chr in 1:22) {
-    sum.raw = bigreadr::fread2(paste0(trait, '/sumdat_Rcov.txt'))
+    sum.raw = bigreadr::fread2(paste0(trait, '/sumdat.txt'))
     sum.raw = as.data.frame(sum.raw)
     
     map_ldref <- readRDS(paste0(ref, "/map.rds")) ##### downloaded from LDpred2 tutorial

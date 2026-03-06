@@ -39,7 +39,7 @@ for (ref_N in c("1kg", "ukbb")) {
       PRS_tmp = PRS[, c(2, x + 5)]; names(PRS_tmp) = c("IID", "SCORESUM")
       cov = merge(cov, PRS_tmp, by = "IID") %>% mutate(PRS = PRS + SCORESUM) %>% select(-SCORESUM)
     }
-    for (seed in 1:10) {
+    for (seed in 1:100) {
       set.seed(seed)
       idx = sample(1:nrow(cov), size = round(nrow(cov) / 2))
       tuning = cov[idx, ]; validation = cov[-idx, ]
@@ -51,7 +51,7 @@ for (ref_N in c("1kg", "ukbb")) {
   result_validation = data.frame(matrix(ncol = 3, nrow = 0))
   names(result_validation) = c("seed", "tune_i", "validation_R2"); result_validation_i = 1
   
-  for (seed_i in 1:10) {
+  for (seed_i in 1:100) {
     result_tmp = result %>% filter(seed == seed_i) %>% filter(tuning_R2 == max(tuning_R2))
     result_validation[result_validation_i,] = c(seed_i, result_tmp$tune_i, result_tmp$validation_R2); result_validation_i = result_validation_i + 1
   }

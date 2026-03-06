@@ -1,5 +1,6 @@
 
 
+
 # PRS-Bridge-article-code
 
 This repository contains instructions and scripts to reproduce all the synthetic and real data analysis results in the PRS-Bridge article, benchmarking the following methods: PRS-Bridge, LDpred2, LASSOSUM, and PRS-CS, PRS-CS-Projection, PRS-CS-threshold, and PRS-CS-Regularized.
@@ -32,12 +33,12 @@ Download the GWAS summary statistics for each trait and get access to the Indivi
  `PATH_TO_PHENO` is a variable specifying the path to your UK Biobank phenotype file in the .rds format. The file must contain the following field IDs:  'f.eid', 'f.31.0.0', 'f.53.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', 'f.21000.0.0', as well as the fields starting with 'f.20001', 'f.20002', 'f.41270', and 'f.41280'. 
     `PATH_TO_GENO` is a variable specifying the basename of the PLINK files for your UK Biobank data, i.e. the files should be named `${PATH_TO_GENO}.{bim,bed,fam}`. 
     PLINK files from any chromosome are acceptable. 
-    The resulting GWAS summary statistics will be stored in the file `${TRAIT}/sumdat_Rcov.txt`. The phenotype and covariate information used for tuning and validation will be stored in `tuning/${TRAIT}_cov.txt` and `validation/${TRAIT}_cov.txt`.
-    -   Breast Cancer: Use the link in [https://www.ccge.medschl.cam.ac.uk/breast-cancer-association-consortium-bcac/data-data-access/summary-results/gwas-summary-results](https://www.ccge.medschl.cam.ac.uk/breast-cancer-association-consortium-bcac/data-data-access/summary-results/gwas-summary-results) and download 'oncoarray_bcac_public_release_oct17.txt.gz'. After decompressing the file, place the text file 'oncoarray_bcac_public_release_oct17.txt' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R BC ${PATH_TO_PHENO} ${PATH_TO_GENO}` to get the processed summary statistics stored in `BC/sumdat_Rcov.txt`
-    -    Coronary Artery disease: Download 'CARDIoGRAMplusC4D 1000 Genomes-based GWAS – Additive' from [https://cardiogramplusc4d.org/data-downloads/](https://cardiogramplusc4d.org/data-downloads/). Place the text file  'cad.add.160614.website.txt' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R CAD ${PATH_TO_PHENO} ${PATH_TO_GENO}` to get the processed summary statistics stored in `CAD/sumdat_Rcov.txt`
-    -    Depression: Download from [https://doi.org/10.6084/m9.figshare.21655784](https://doi.org/10.6084/m9.figshare.21655784). Place the text file  'daner_pgc_mdd_meta_w2_no23andMe_rmUKBB' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R Depression ${PATH_TO_PHENO} ${PATH_TO_GENO}` to get the processed summary statistics stored in `Depression/sumdat_Rcov.txt`.
-    -    Inflammatory Bowel Disease: Download 'Latest combined GWAS and Immunochip trans-ancestry' from [https://www.ibdgenetics.org/](https://www.ibdgenetics.org/). Place the text file 'EUR.IBD.gwas_info03_filtered.assoc' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R IBD ${PATH_TO_PHENO} ${PATH_TO_GENO}` to get the processed summary statistics stored in `IBD/sumdat_Rcov.txt`.
-     -    Rheumatoid Arthritis: Download 'Eurpean RA GWAS meta-analysis' from [http://plaza.umin.ac.jp/~yokada/datasource/files/GWASMetaResults/RA_GWASmeta_European_v2.txt.gz](http://plaza.umin.ac.jp/~yokada/datasource/files/GWASMetaResults/RA_GWASmeta_European_v2.txt.gz). Place the text file 'RA_GWASmeta_European_v2.txt.gz' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R RA ${PATH_TO_PHENO} ${PATH_TO_GENO}` to get the processed summary statistics stored in `RA/sumdat_Rcov.txt`.
+    The resulting GWAS summary statistics will be stored in the file `${TRAIT}/sumdat.txt`. The phenotype and covariate information used for tuning and validation will be stored in `tuning/${TRAIT}_cov.txt` and `validation/${TRAIT}_cov.txt`.
+    -   Breast Cancer: Use the link in [https://www.ccge.medschl.cam.ac.uk/breast-cancer-association-consortium-bcac/data-data-access/summary-results/gwas-summary-results](https://www.ccge.medschl.cam.ac.uk/breast-cancer-association-consortium-bcac/data-data-access/summary-results/gwas-summary-results) and download 'oncoarray_bcac_public_release_oct17.txt.gz'. After decompressing the file, place the text file 'oncoarray_bcac_public_release_oct17.txt' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R BC ${PATH_TO_PHENO} ${PATH_TO_GENO}` to get the processed summary statistics stored in `BC/sumdat.txt`
+    -    Coronary Artery disease: Download 'CARDIoGRAMplusC4D 1000 Genomes-based GWAS – Additive' from [https://cardiogramplusc4d.org/data-downloads/](https://cardiogramplusc4d.org/data-downloads/). Place the text file  'cad.add.160614.website.txt' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R CAD ${PATH_TO_PHENO} ${PATH_TO_GENO}` to get the processed summary statistics stored in `CAD/sumdat.txt`
+    -    Depression: Download from [https://doi.org/10.6084/m9.figshare.21655784](https://doi.org/10.6084/m9.figshare.21655784). Place the text file  'daner_pgc_mdd_meta_w2_no23andMe_rmUKBB' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R Depression ${PATH_TO_PHENO} ${PATH_TO_GENO}` to get the processed summary statistics stored in `Depression/sumdat.txt`.
+    -    Inflammatory Bowel Disease: Download 'Latest combined GWAS and Immunochip trans-ancestry' from [https://www.ibdgenetics.org/](https://www.ibdgenetics.org/). Place the text file 'EUR.IBD.gwas_info03_filtered.assoc' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R IBD ${PATH_TO_PHENO} ${PATH_TO_GENO}` to get the processed summary statistics stored in `IBD/sumdat.txt`.
+     -    Rheumatoid Arthritis: Download 'Eurpean RA GWAS meta-analysis' from [http://plaza.umin.ac.jp/~yokada/datasource/files/GWASMetaResults/RA_GWASmeta_European_v2.txt.gz](http://plaza.umin.ac.jp/~yokada/datasource/files/GWASMetaResults/RA_GWASmeta_European_v2.txt.gz). Place the text file 'RA_GWASmeta_European_v2.txt.gz' in the root directory. Then run `Rscript run-real-data-analysis/process_disease_dat.R RA ${PATH_TO_PHENO} ${PATH_TO_GENO}` to get the processed summary statistics stored in `RA/sumdat.txt`.
 
 **Note:** 
 For coronary artery disease and inflammatory bowel disease, we obtained the original GWAS datasets in 2022. These datasets are no longer publicly available as of February 2026. The corresponding references are provided in Table 1 of the manuscript. Interested researchers may contact the corresponding authors of the original studies to request access.
@@ -49,7 +50,7 @@ For coronary artery disease and inflammatory bowel disease, we obtained the orig
     `FIELD_ID` is a variable denoting the UK Biobank field ID corresponding to the specified `${TRAIT}` in the phenotype file.
     `PATH_TO_PHENO` is a variable specifying the path to your UK Biobank phenotype file stores in the .rds format. The file must contain the following field IDs: 'f.eid', 'f.31.0.0', 'f.21022.0.0', 'f.22009', 'f.22020', and 'f.21000.0.0', as well as the field ID specified by `${FIELD_ID}`.
     `PATH_TO_GENO` is a variable specifying the basename of the PLINK files for your UK Biobank data, i.e. the files should be named `${PATH_TO_GENO}.{bim,bed,fam}`. 
-    The resulting GWAS summary statistics will be stored in the file `${TRAIT}/sumdat_Rcov.txt`. The phenotype and covariate information used for tuning and validation will be stored in `tuning/${TRAIT}_cov.txt` and `validation/${TRAIT}_cov.txt`.
+    The resulting GWAS summary statistics will be stored in the file `${TRAIT}/sumdat.txt`. The phenotype and covariate information used for tuning and validation will be stored in `tuning/${TRAIT}_cov.txt` and `validation/${TRAIT}_cov.txt`.
      -    BMI: Run `Rscript run-real-data-analysis/process_continuous_dat.R BMI f.21001.0.0 ${PATH_TO_PHENO} ${PATH_TO_GENO}`. 
      -    Resting Heart Rate: Run `Rscript process_continuous_dat.R RHR f.102.0.0 ${PATH_TO_PHENO} ${PATH_TO_GENO}`. 
      -    High-density lipoprotein: Run `Rscript run-real-data-analysis/process_continuous_dat.R HDL f.30760.0.0 ${PATH_TO_PHENO} ${PATH_TO_GENO}`.
@@ -105,6 +106,8 @@ The resulting files will be stored in the directory `${TRAIT}/data/`.
      -   PRS-CS and its modifications: Run `sbatch run-real-data-analysis/${method}.sh ${TRAIT} ${PATH_TO_GENO}`, where `${method}` should be chosen from `PRScs`, `PRScs_proj`, `PRScs_regularized`, and `PRScs_threshold`. `PATH_TO_GENO` specifies the basename of the PLINK files for your UK Biobank data, i.e. the files should be named `${PATH_TO_GENO}.{bim,bed,fam}`. This command submits SLURM array jobs to run PRS-CS and its modifications in parallel. The estimated regression coefficients will be stored in the directory `${TRAIT}/1kg/${method}/result` and `${TRAIT}/ukbb/${method}/result`.
      -   PRS-Bridge: Run `sbatch run-real-data-analysis/PRSBridge.sh ${TRAIT}`. This command submits SLURM array jobs to run PRS-Bridge in parallel. The estimated regression coefficients will be stored in the directory `${TRAIT}/1kg/Bridge_small`,  `${TRAIT}/1kg/Bridge_large`, `${TRAIT}/ukbb/Bridge_small`, and `${TRAIT}/ukbb/Bridge_large`.
  
+ **Note:** 
+ The `example` folder contains an example of preprocessed datasets required to reproduce the real-data analysis workflow. `example/sumdat.txt` is a simulated example of the input GWAS summary statistics. It is used by the script `real-data-analysis/sumdat_QC.R` to demonstrate how the summary statistics should be prepared before running all methods. `example/UKBB` and `example/1kg` contain simulated individual-level genotype data used for LDpred2 and Lassosum to construct LD reference data. Users can directly run `bash example-run-real-data-analysis.sh` to generate SNP effect size estimates from each method using these example datasets.
  
 ### Evaluate and Plot Real Data Analysis Results
 Having run all the methods on all the datasets, evaluate their performances via `Rscript evaluate-real-data-analysis/get_sd_${method_name}.R ${TRAIT} ${OUTCOME} ${PATH_TO_GENO}` 
@@ -117,6 +120,9 @@ The summary of each method's performance will be stored in `${TRAIT}/${method}/r
 Finally, the results are graphically summarized via `Rscript plot-result/plot.R`, which reproduces Figure 4 and 5.
 The other figures in the main manuscript and the supplement can similarly be reproduced by running appropriate scripts under the `plot-result/` folder.
 
+**Note:** 
+The `tuning` and `validation` folders contain simulated phenotype data used to evaluate the performance of each method after running the example in the `run-real-data-analysis` section. The phenotype is simulated as a continuous outcome. These files will be generated automatically when running `run-real-data-analysis/process_disease_dat.R` and `run-real-data-analysis/process_continuous_dat.R` in the `Data Download and Pre-process` section. Users can directly run `bash example-evaluate-real-data-analysis.sh` to get the performance of each method using these example datasets.
+ 
  
 ## Directory Contents
 This is an optional read for those interested in learning more about the specific files in the above steps to reproduce all the results.
@@ -124,7 +130,7 @@ This is an optional read for those interested in learning more about the specifi
 ### data
 This folder contains the following files:
 -   `PRScs_sumdat.txt`,  `chr22.bim`: used to generate posterior samples of the regression coefficients used to create Figure 1. Specifically, `PRScs_sumdat.txt` provides the input GWAS summary statistics for original and extension of PRS-CS, and `chr22.bim` contains the individual-level genotype variant information (PLINK `.bim` file) used as the input for original and extension of PRS-CS.
--   `sumdat_Rcov.txt`: Example input summary statistics used by the script in the run-real-data-analysis/sumdat_QC.R to demonstrate how input data should be formatted before preparing data for running all methods.
+
 
 ### PRS-CS-proj
 

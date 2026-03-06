@@ -57,5 +57,5 @@ for (chr in 1:22) {
   beta_grid = cbind(info_snp$rsid, info_snp$a0, info_snp$a1, beta_grid)
   colnames(beta_grid) = c(c('marker.ID', 'a0', 'a1'),paste0('e',1:nrow(params)))
   
-  bigreadr::fwrite2(beta_grid, paste0(trait, '/chr', chr,'/ldpred2effect-hm3-EUR-ref_N', ref_N, '.txt'), sep='\t')
+  bigreadr::fwrite2(beta_grid, paste0(trait, '/chr', chr,'/ldpred2effect-hm3-EUR-ref_', ref_N, '.txt'), sep='\t')
 }

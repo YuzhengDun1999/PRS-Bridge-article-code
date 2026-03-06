@@ -1,5 +1,5 @@
 ########## This script is used to preprocess disease summary statistics downloaded from public website to the required input pipeline.
-########## Out put sumdat_Rcov.txt should have exactly same format and name as data/sumdat_Rcov.txt
+########## Out put sumdat.txt should have exactly same format and name as data/sumdat.txt
 library(dplyr)
 
 temp <- commandArgs(TRUE)
@@ -92,7 +92,7 @@ if (trait == "RA") {
     mutate(SE = (log(CI_up) - log(CI_low)) / 2 / 1.96) %>% mutate(FRQ = 0.1) %>%
     select(CHR, BP, SNP, A1, A2, FRQ, P, BETA, SE, N)
   names(sumdat) = c("CHR","POS","SNP_ID","REF","ALT","REF_FRQ","PVAL","BETA","SE","N")
-  bigreadr::fwrite2(dat, file = paste0(trait, "/sumdat_Rcov.txt"), sep = "\t")
+  bigreadr::fwrite2(dat, file = paste0(trait, "/sumdat.txt"), sep = "\t")
   get_incident(1464, paste0("M0", c(50, 51, 52, 53, 58, 59, 60, 61, 62, 63, 64, 68, 69)), trait)
 }
 
@@ -102,7 +102,7 @@ if (trait == "IBD") {
   dat = dat %>% mutate(BETA = log(OR)) %>% mutate(N = 34652) %>% mutate(SE = SE/OR) %>%
     select(CHR, BP, SNP, A1, A2, FRQ_A_12882, P, BETA, SE, N)
   names(dat) = c("CHR","POS","SNP_ID","REF","ALT","REF_FRQ","PVAL","BETA","SE","N")
-  bigreadr::fwrite2(dat, file = paste0(trait, "/sumdat_Rcov.txt"), sep = "\t")
+  bigreadr::fwrite2(dat, file = paste0(trait, "/sumdat.txt"), sep = "\t")
   get_incident(1461, paste0("K", c(500, 501, 508, 509, 510, 511, 512, 513, 514, 515, 518, 519)), trait)
 }
 
@@ -112,7 +112,7 @@ if (trait == "CAD") {
   dat = dat %>% select(chr, bp_hg19, markername, effect_allele, noneffect_allele, effect_allele_freq, p_dgc, beta, se_dgc)
   names(dat) = c("CHR", "POS", "SNP_ID", "REF", "ALT", "REF_FRQ", "PVAL", "BETA", "SE")
   dat$N = 184305
-  bigreadr::fwrite2(dat, file = paste0(trait, "/sumdat_Rcov.txt"), sep = "\t")
+  bigreadr::fwrite2(dat, file = paste0(trait, "/sumdat.txt"), sep = "\t")
   get_incident(c(1074, 1075), paste0("I", c(210, 211, 212, 213, 214, 219, "21X", 220, 221, 228, 229, 231:238, 220, 240, 241, 248, 249, 250:259)), trait)
 }
 
@@ -122,7 +122,7 @@ if (trait == "Depression") {
   dat = dat %>% mutate(BETA = log(OR)) %>% mutate(N = 2 * Neff_half) %>% 
     select(CHR, BP, SNP, A1, A2, FRQ_A_45396, P, BETA, SE, N)
   names(dat) = c("CHR", "POS", "SNP_ID", "REF", "ALT", "REF_FRQ", "PVAL", "BETA","SE", "N")
-  bigreadr::fwrite2(dat, file = paste0(trait, "/sumdat_Rcov.txt"), sep = ",")
+  bigreadr::fwrite2(dat, file = paste0(trait, "/sumdat.txt"), sep = ",")
   get_incident(1286, paste0("F", c(320, 321, 322, 323, 328, 329, 330, 331, 332, 333, 334, 338, 339)))
 }
 
@@ -139,6 +139,6 @@ if (trait == "BC") {
   names(dat) = c("CHR", "POS", "SNP_ID", "REF", "ALT", "REF_FRQ", "PVAL", "BETA", "SE", "PVAL")
   dat = dat %>% select(CHR, POS, SNP_ID, REF, ALT, REF_FRQ, PVAL, BETA, SE)
   dat$N = 4 / (1 / 137045 + 1 / 119078)
-  bigreadr::fwrite2(dat, file = paste0(trait, "/sumdat_Rcov.txt"), sep = ",")
+  bigreadr::fwrite2(dat, file = paste0(trait, "/sumdat.txt"), sep = ",")
   get_incident(1002, paste0("F", c(500:509)), trait, "f.20001")
 }

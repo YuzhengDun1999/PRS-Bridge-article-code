@@ -3,7 +3,7 @@
 temp <- commandArgs(TRUE)
 trait = temp[1] # phenotype name, same for the whole pipeline
 
-sumdat = bigreadr::fread2(paste0(trait, '/sumdat_Rcov.txt')) ###### Change the path to your summary statistics, it must have the same format and name as the example shown in the data/sumdat_Rcov.txt
+sumdat = bigreadr::fread2(paste0(trait, '/sumdat.txt')) ###### Change the path to your summary statistics, it must have the same format and name as the example shown in the data/sumdat_Rcov.txt
 system(paste0("mkdir -p ", trait, "/data/chr{1..22}"))
 
 ################### preprocess summary level data ################

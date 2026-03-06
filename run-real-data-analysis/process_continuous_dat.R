@@ -79,4 +79,4 @@ freq = freq %>% filter(ID %in% sumdat$ID)cont
 names(sumdat) = c("CHR", "POS","SNP_ID","REF","ALT", "A1", "TEST", "N","BETA", "SE","T", "PVAL")
 sumdat$REF_FREQ = 1-freq[,5]
 sumdat = sumdat %>% select(CHR, POS, SNP_ID, REF, ALT, REF_FRQ, PVAL, BETA, SE, N)
-bigreadr::fwrite2(dat, file = paste0(trait, "/sumdat_Rcov.txt"), sep = "\t")
+bigreadr::fwrite2(dat, file = paste0(trait, "/sumdat.txt"), sep = "\t")
