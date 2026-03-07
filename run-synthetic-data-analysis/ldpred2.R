@@ -7,10 +7,9 @@ ref = temp[3]
 trait = paste0('rho', rho, 'GA', GA)
 
 ref_N = "1kg"
-
 ldr = 3/1000
 for (chr in 1:22) {
-  sum.raw = bigreadr::fread2(paste0(trait, '/sumdat_Rcov.txt'))
+  sum.raw = bigreadr::fread2(paste0(trait, '/sumdat/chr', chr, '/sumdat.txt'))
   sum.raw = as.data.frame(sum.raw)
   
   # ------------------------ Run LDpred2
