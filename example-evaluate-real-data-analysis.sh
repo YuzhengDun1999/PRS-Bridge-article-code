@@ -11,3 +11,5 @@ Rscript evaluate-real-data-analysis/get_sd_PRScs_proj.R ${TRAIT} ${OUTCOME} ${PA
 Rscript evaluate-real-data-analysis/get_sd_PRScs_regularized.R ${TRAIT} ${OUTCOME} ${PATH_TO_GENO}
 Rscript evaluate-real-data-analysis/get_sd_PRScs_threshold.R ${TRAIT} ${OUTCOME} ${PATH_TO_GENO}
 Rscript evaluate-real-data-analysis/get_sd_ldpred2.R ${TRAIT} ${OUTCOME} ${PATH_TO_GENO}
+
+Rscript plot-result/plot_example.R

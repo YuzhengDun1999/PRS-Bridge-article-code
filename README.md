@@ -139,7 +139,7 @@ The other figures in the main manuscript and the supplement can similarly be rep
 The tuning and validation data necessary for this evaluation step are generated under the folders `tuning` and `validation` when you run `run-real-data-analysis/process_disease_dat.R` and `run-real-data-analysis/process_continuous_dat.R` as described in the "Data Download and Preprocess" section.
 The `tuning` and `validation` folders as provided only contain "faux" individual-level covariate data for illustration purposes;
 these data are used for evaluating the faux data analysis results produced by the script `example-evaluate-real-data-analysis.sh` in the previous step.
-Running `bash example-evaluate-real-data-analysis.sh` evaluates the faux data analysis results.
+Running `bash example-evaluate-real-data-analysis.sh` evaluates and visualizes the faux data analysis results.
  
  
 ## Directory Contents
