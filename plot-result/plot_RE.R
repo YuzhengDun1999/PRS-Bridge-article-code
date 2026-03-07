@@ -29,10 +29,14 @@ my_plot_new = function(trait){
           axis.text.y=element_text(face="bold", size = 14),
           axis.title = element_text(face="bold", size = 14),
           axis.text = element_text(face="bold", size = 14),
-          legend.title = element_text(face = "bold", size = 1),
-          legend.text = element_text(face = "bold", size = 1), 
+          legend.title = element_text(face = "bold", size = 12),
+          legend.text = element_text(face = "bold", size = 12), 
           plot.title = element_text(face="bold", size = 18, hjust = 0.5), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
-    scale_fill_manual(values=c("#99aecf", "#0250c9", "#0ecc41", "#c2a482", '#c26802', '#99aecf','#0ecc41',"#c2a482", '#c26802')) +
+    scale_fill_manual(values=c("LDpred2 (Banded)" = "#99aecf", "LDpred2 (Large-block)" = "#0250c9",
+                               "PRS-CS (Small-block)" = "#0ecc41", "PRS-Bridge (Small-block)" = "#c2a482", "PRS-Bridge (Large-block)" = "#c26802",
+                               "ldpred2_banded_1kg" = "#99aecf", "PRScs_1kg" = "#0ecc41",
+                               "PRSBridge_small_block_1kg"  = "#c2a482", "PRSBridge_large_block_1kg"  = "#c26802"
+    ), breaks = c('LDpred2 (Banded)', 'LDpred2 (Large-block)', 'PRS-CS (Small-block)', 'PRS-Bridge (Small-block)', 'PRS-Bridge (Large-block)')) +
     guides(linetype = guide_legend(override.aes = list(fill = NA, col = "black")))
   return(plot1)
 }

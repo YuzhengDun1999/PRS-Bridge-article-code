@@ -9,10 +9,10 @@ method = c('Lassosum (Small-block)', 'LDpred2 (Banded)', 'LDpred2 (Large-block)'
 
 ##### Input trait is the same as trait used in run-methods and evaluation
 my_plot_new = function(trait){
-  result = read.table(paste0(trait, '/Lassosum_N5000_validation_result_std.txt'), header = TRUE)
+  result = read.table(paste0(trait, '/Lassosum_Nukbb_validation_result_std.txt'), header = TRUE)
   result = data.frame(method = method[1], R2 = result$R2, std = result$std)
   result_i = 1
-  validation_result = read.table(paste0(trait, '/ldpred2_N5000_validation_result_std.txt'), header = TRUE); result_i = result_i + 1
+  validation_result = read.table(paste0(trait, '/ldpred2_ukbb_validation_result_std.txt'), header = TRUE); result_i = result_i + 1
   result[result_i, 1] = method[result_i]; result[result_i, 2] = validation_result$R2; result[result_i, 3] = validation_result$std
   validation_result = read.table(paste0(trait, '/ldpred2_Nblk_provided_validation_result_std.txt'), header = TRUE); result_i = result_i + 1
   result[result_i, 1] = method[result_i]; result[result_i, 2] = validation_result$R2; result[result_i, 3] = validation_result$std
@@ -51,7 +51,11 @@ my_plot_new = function(trait){
           legend.title = element_text(face = "bold", size = 1),
           legend.text = element_text(face = "bold", size = 1), 
           plot.title = element_text(face="bold", size = 18, hjust = 0.5), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
-    scale_fill_manual(values=c("#e3c278", "#99aecf", "#0250c9", "#0ecc41", "#c2a482", '#c26802', '#e3c278', '#99aecf','#0ecc41',"#c2a482", '#c26802')) +
+    scale_fill_manual(values=c("Lassosum (Small-block)" = "#e3c278", "LDpred2 (Banded)" = "#99aecf", "LDpred2 (Large-block)" = "#0250c9",
+                               "PRS-CS (Small-block)" = "#0ecc41", "PRS-Bridge (Small-block)" = "#c2a482", "PRS-Bridge (Large-block)" = "#c26802",
+                               "Lassosum2_1kg" = "#e3c278", "ldpred2_banded_1kg" = "#99aecf", "PRScs_1kg" = "#0ecc41",
+                               "PRSBridge_small_block_1kg"  = "#c2a482", "PRSBridge_large_block_1kg"  = "#c26802"
+    ), breaks = c('Lassosum (Small-block)', 'LDpred2 (Banded)', 'LDpred2 (Large-block)', 'PRS-CS (Small-block)', 'PRS-Bridge (Small-block)', 'PRS-Bridge (Large-block)')) +
     guides(linetype = guide_legend(override.aes = list(fill = NA, col = "black")))
   return(plot1)
 }
@@ -62,8 +66,6 @@ HDL = my_plot_new("HDL") + labs(y = expression(bold(R^2)))
 LDL = my_plot_new("LDL") + labs(y = expression(bold(R^2)))
 APOEA = my_plot_new("APOEA") + labs(y = expression(bold(R^2)))
 APOEB = my_plot_new("APOEB") + labs(y = expression(bold(R^2)))
-(my_plot_new("BMI") + my_plot_new("resting_heart_rate") + my_plot_new("HDL") + 
-    my_plot_new("LDL") + my_plot_new("APOEA") + my_plot_new("APOEB")) / 6
 
 plot = ggarrange(BMI + rremove("xlab"), resting_heart_rate+ rremove("ylab") + rremove("xlab"), HDL+ rremove("ylab") + rremove("xlab"), LDL + rremove("xlab"), APOEA + rremove("xlab") + rremove("ylab"), APOEB + rremove("xlab") + rremove("ylab"), ncol=3, nrow=2, common.legend = TRUE, legend="left")
 ggsave("continuous_figure.pdf", plot, width = 8, height = 6)
@@ -74,7 +76,5 @@ Depression = my_plot_new("Depression") + labs(y = "Transformed AUC")
 RA = my_plot_new("RA") + labs(y = "Transformed AUC")
 IBD = my_plot_new("IBD") + labs(y = "Transformed AUC")
 plot = ggarrange(BC+ rremove("xlab"), CAD + rremove("ylab") + rremove("xlab"), Depression + rremove("ylab") + rremove("xlab"), RA+ rremove("xlab"), IBD + rremove("xlab") + rremove("ylab"), ncol=3, nrow=2, common.legend = TRUE, legend="left")
-(my_plot_new("BC") + my_plot_new("CAD") + my_plot_new("Depression") + 
-    my_plot_new("RA") + my_plot_new("IBD") + my_plot_new("APOEB")) / 5
 
 ggsave("disease_figure.pdf", plot, width = 8, height = 6)

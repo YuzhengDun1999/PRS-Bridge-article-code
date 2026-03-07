@@ -42,7 +42,11 @@ my_plot = function(trait){
           legend.title = element_text(face = "bold", size = 12),
           legend.text = element_text(face = "bold", size = 12), 
           plot.title = element_text(face="bold", size = 18, hjust = 0.5), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
-    scale_fill_manual(values=c('#a6f3b8','#4ae673',"#0ecc41", '#079933', '#004d1f','#0ea3cc',"#ccae0e", '#a6f3b8','#4ae673',"#0ecc41", '#079933', '#004d1f','#0ea3cc',"#ccae0e"))+
+    scale_fill_manual(values=c("PRS-CS (Bound:0.01)" = "#a6f3b8", "PRS-CS (Bound:0.1)" = "#4ae673",
+                               "PRS-CS (Default)" = "#0ecc41", "PRS-CS (Bound:10)" = "#079933", "PRS-CS (Bound:100)" = "#004d1f",
+                               "PRS-CS-Projection" = "#0ea3cc", "PRS-CS-Regularized" = "#ccae0e", "8" = "#a6f3b8", "9" = "#4ae673",
+                               "10" = "#0ecc41", "11" = "#079933", "12" = "#004d1f", "13" = "#0ea3cc", "14" = "#ccae0e"
+    ), breaks = c('PRS-CS (Bound:0.01)', 'PRS-CS (Bound:0.1)', 'PRS-CS (Default)', 'PRS-CS (Bound:10)', 'PRS-CS (Bound:100)', 'PRS-CS-Projection', 'PRS-CS-Regularized')) +
     guides(linetype = guide_legend(override.aes = list(fill = NA, col = "black")))
   return(plot1)
 }

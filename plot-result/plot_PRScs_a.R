@@ -36,8 +36,8 @@ my_plot_new = function(pheno_name){
           legend.title = element_text(face = "bold", size = 14),
           legend.text = element_text(face = "bold", size = 14), 
           plot.title = element_text(face="bold", size = 18, hjust = 0.5), panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + 
-    scale_fill_manual(values=c("#cc9d0e", "#0ecc41", "#0eb3cc", "#cc9d0e", "#0ecc41", "#0eb3cc")) +
-    guides(linetype = guide_legend(override.aes = list(fill = NA, col = "black")))
+    scale_fill_manual(values=c('a=0.5' = "#cc9d0e", 'a=1' = "#0ecc41", 'a=1.5' = "#0eb3cc", 'a=0.5 1kg' = "#cc9d0e", 'a=1 1kg' = "#0ecc41", 'a=1.5 1kg' = "#0eb3cc"
+    ), breaks = c('a=0.5', 'a=1', 'a=1.5')) + guides(linetype = guide_legend(override.aes = list(fill = NA, col = "black")))
   return(plot1)
 }
 
