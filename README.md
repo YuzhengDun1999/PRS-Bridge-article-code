@@ -30,7 +30,8 @@ The necessary LD-related files for the methods should be placed in the 'data/' d
     (The synthetic data and the summary statistics for disease traits are public available.)
 
 **Note:** 
-We do not maintain the download links for the pre-estimated LD matrices required by LDpred2 and PRS-CS. If a link has expired, please refer to the corresponding method’s website for the latest download links.
+For the pre-estimated LD matrices required by LDpred2 and PRS-CS, the download links are not maintained by us and are only confirmed to be current as of March, 2026 ---
+if necessary, please refer to the corresponding methods’ websites for the latest download links.
 
 
 ## Data Download and Pre-process
@@ -139,7 +140,7 @@ This is an optional read for those interested in learning more about the specifi
 
 ### data
 This folder contains the following files:
--   `PRScs_sumdat.txt`,  `chr22.bim`: used to generate posterior samples of the regression coefficients used to create Figure 1. Specifically, `PRScs_sumdat.txt` provides the input GWAS summary statistics for original and extension of PRS-CS, and `chr22.bim` contains the individual-level genotype variant information (PLINK `.bim` file) used as the input for original and extension of PRS-CS.
+-   `PRScs_sumdat.txt`,  `chr22.bim`: used to generate posterior samples of the regression coefficients used to create Figure 1. Specifically, `PRScs_sumdat.txt` provides the input GWAS summary statistics for the original and modified versions of PRS-CS, and `chr22.bim` provides the individual-level genotype variant information used as an input for the original and modified versions of PRS-CS.
 
 
 ### PRS-CS-proj
