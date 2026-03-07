@@ -118,11 +118,11 @@ The resulting files will be stored in the directory `${TRAIT}/data/`.
      -   PRS-Bridge: Run `sbatch run-real-data-analysis/PRSBridge.sh ${TRAIT}`. This command submits SLURM array jobs to run PRS-Bridge in parallel. The estimated regression coefficients will be stored in the directory `${TRAIT}/1kg/Bridge_small`,  `${TRAIT}/1kg/Bridge_large`, `${TRAIT}/ukbb/Bridge_small`, and `${TRAIT}/ukbb/Bridge_large`.
  
 **Note:** 
-The `example` folder contains "faux" datasets that have the same structure as the real datasets after you download and preprocess them following the instructions in the "Data Download and Preprocess" section.
-These faux datasets are provided to illustrate the real-data analysis workflow:
+The `example` folder contains "mock" datasets that have the same structure as the real datasets after you download and preprocess them following the instructions in the "Data Download and Preprocess" section.
+These mock datasets are provided to illustrate the real-data analysis workflow:
 they can be used to run the script `example-run-real-data-analysis.sh` &mdash; like the real datasets can be used to run the scripts under `run-real-data-analysis/` &mdash; to generate SNP effect size estimates from all the methods.
-More precisely, `example/sumdat.txt` provides faux input GWAS summary statistics, and `example/UKBB` and `example/1kg` provide faux individual-level genotype data used to construct LD reference data. 
-Running `bash example-run-real-data-analysis.sh` generates the SNP effect size estimates based on the faux datasets.
+More precisely, `example/sumdat.txt` provides mock input GWAS summary statistics, and `example/UKBB` and `example/1kg` provide mock individual-level genotype data used to construct LD reference data. 
+Running `bash example-run-real-data-analysis.sh` generates the SNP effect size estimates based on the mock datasets.
  
 ### Evaluate and Plot Real Data Analysis Results
 Having run all the methods on all the datasets, evaluate their performances via `Rscript evaluate-real-data-analysis/get_sd_${method_name}.R ${TRAIT} ${OUTCOME} ${PATH_TO_GENO}` 
@@ -137,9 +137,9 @@ The other figures in the main manuscript and the supplement can similarly be rep
 
 **Note:** 
 The tuning and validation data necessary for this evaluation step are generated under the folders `tuning` and `validation` when you run `run-real-data-analysis/process_disease_dat.R` and `run-real-data-analysis/process_continuous_dat.R` as described in the "Data Download and Preprocess" section.
-The `tuning` and `validation` folders as provided only contain "faux" individual-level covariate data for illustration purposes;
-these data are used for evaluating the faux data analysis results produced by the script `example-evaluate-real-data-analysis.sh` in the previous step.
-Running `bash example-evaluate-real-data-analysis.sh` evaluates and visualizes the faux data analysis results.
+The `tuning` and `validation` folders as provided only contain "mock" individual-level covariate data for illustration purposes;
+these data are used for evaluating the mock data analysis results produced by the script `example-evaluate-real-data-analysis.sh` in the previous step.
+Running `bash example-evaluate-real-data-analysis.sh` evaluates and visualizes the mock data analysis results.
  
  
 ## Directory Contents
