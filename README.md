@@ -13,15 +13,15 @@ Download PRS-Bridge, PRS-CS, PLINK 1.9, and PLINK 2.0 from the links below and p
 Install LASSOSUM and LDpred2 in R according to the instructions in their respective tutorials.
 The necessary LD-related files for the methods should be placed in the 'data/' directory.
 	- PRS-Bridge: [https://github.com/YuzhengDun1999/PRSBridge](https://github.com/YuzhengDun1999/PRSBridge).
-	<br> Additionally, download pre-estimated LD matrices for EUR population required by PRS-Bridge using the following links: 
-		- [1000 Genomes Small Block](https://zenodo.org/records/18706275); `tar -zxvf ref_1kg.tar.gz`
-		- [UK Biobank Large Block](https://zenodo.org/records/18706275); `tar -zxvf ref_ukbb_large.tar.gz`
-		- [1000 Genomes Large Block](https://zenodo.org/records/18673493); `tar -zxvf ref_1kg_large.tar.gz`
-		- [UK Biobank Small Block](https://zenodo.org/records/18673493 "AFR reference"); `tar -zxvf ref_ukbb.tar.gz`
+	<br> Additionally, download pre-estimated LD matrices for EUR population required by PRS-Bridge using the following links; the downloaded files can be uncompressed via a command `tar -zxvf`: 
+		- [1000 Genomes Small Block](https://zenodo.org/records/18706275)
+		- [UK Biobank Large Block](https://zenodo.org/records/18706275)
+		- [1000 Genomes Large Block](https://zenodo.org/records/18673493)
+		- [UK Biobank Small Block](https://zenodo.org/records/18673493 "AFR reference")
 	- PRS-CS [https://github.com/getian107/PRScs](https://github.com/getian107/PRScs).
-		<br> Additionally, download pre-estimated LD matrices for EUR population required by PRS-CS using the following links: 
-		- [UK Biobank ](https://www.dropbox.com/s/t9opx2ty6ucrpib/ldblk_ukbb_eur.tar.gz?dl=0 "EUR reference"); `tar -zxvf ldblk_ukbb_eur.tar.gz`
-		- [1000 Genomes](https://www.dropbox.com/s/mt6var0z96vb6fv/ldblk_1kg_eur.tar.gz?dl=0 "EUR reference") ;`tar -zxvf ldblk_1kg_eur.tar.gz`
+		<br> Additionally, download pre-estimated LD matrices for EUR population required by PRS-CS using the following links; the downloaded files can be uncompressed via a command `tar -zxvf`: 
+		- [UK Biobank ](https://www.dropbox.com/s/t9opx2ty6ucrpib/ldblk_ukbb_eur.tar.gz?dl=0 "EUR reference")
+		- [1000 Genomes](https://www.dropbox.com/s/mt6var0z96vb6fv/ldblk_1kg_eur.tar.gz?dl=0 "EUR reference")
 	-  LASSOSUM: [https://github.com/tshmak/lassosum](https://github.com/tshmak/lassosum). 
 	- LDpred2: [https://privefl.github.io/bigsnpr/articles/LDpred2.html](https://privefl.github.io/bigsnpr/articles/LDpred2.html).
     <br> Additionally, download pre-estimated LD matrix with block structure required by LDpred2 using the following link: [HapMap3 variants with independent LD blocks](https://doi.org/10.6084/m9.figshare.19213299).
