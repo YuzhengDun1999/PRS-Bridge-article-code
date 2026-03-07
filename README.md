@@ -117,8 +117,12 @@ The resulting files will be stored in the directory `${TRAIT}/data/`.
      -   PRS-CS and its modifications: Run `sbatch run-real-data-analysis/${method}.sh ${TRAIT} ${PATH_TO_GENO}`, where `${method}` should be chosen from `PRScs`, `PRScs_proj`, `PRScs_regularized`, and `PRScs_threshold`. `PATH_TO_GENO` specifies the basename of the PLINK files for your UK Biobank data, i.e. the files should be named `${PATH_TO_GENO}.{bim,bed,fam}`. This command submits SLURM array jobs to run PRS-CS and its modifications in parallel. The estimated regression coefficients will be stored in the directory `${TRAIT}/1kg/${method}/result` and `${TRAIT}/ukbb/${method}/result`.
      -   PRS-Bridge: Run `sbatch run-real-data-analysis/PRSBridge.sh ${TRAIT}`. This command submits SLURM array jobs to run PRS-Bridge in parallel. The estimated regression coefficients will be stored in the directory `${TRAIT}/1kg/Bridge_small`,  `${TRAIT}/1kg/Bridge_large`, `${TRAIT}/ukbb/Bridge_small`, and `${TRAIT}/ukbb/Bridge_large`.
  
- **Note:** 
- The `example` folder contains an example of preprocessed datasets required to reproduce the real-data analysis workflow. `example/sumdat.txt` is a simulated example of the input GWAS summary statistics. It is used by the script `real-data-analysis/sumdat_QC.R` to demonstrate how the summary statistics should be prepared before running all methods. `example/UKBB` and `example/1kg` contain simulated individual-level genotype data used for LDpred2 and Lassosum to construct LD reference data. Users can directly run `bash example-run-real-data-analysis.sh` to generate SNP effect size estimates from each method using these example datasets.
+**Note:** 
+The `example` folder contains "faux" datasets that have the same structure as the real datasets after you download and preprocess them following the instructions in the "Data Download and Preprocess" section.
+These faux datasets are provided to illustrate the real-data analysis workflow:
+they can be used to run the script `example-run-real-data-analysis.sh` &mdash; like the real datasets can be used to run the scripts under `run-real-data-analysis/` &mdash; to generate SNP effect size estimates from all the methods.
+More precisely, `example/sumdat.txt` provides faux input GWAS summary statistics, and `example/UKBB` and `example/1kg` provide faux individual-level genotype data used to construct LD reference data. 
+Running `bash example-run-real-data-analysis.sh` generates the SNP effect size estimates based on the faux datasets.
  
 ### Evaluate and Plot Real Data Analysis Results
 Having run all the methods on all the datasets, evaluate their performances via `Rscript evaluate-real-data-analysis/get_sd_${method_name}.R ${TRAIT} ${OUTCOME} ${PATH_TO_GENO}` 
@@ -132,7 +136,10 @@ Finally, the results are graphically summarized via `Rscript plot-result/plot.R`
 The other figures in the main manuscript and the supplement can similarly be reproduced by running appropriate scripts under the `plot-result/` folder.
 
 **Note:** 
-The `tuning` and `validation` folders contain simulated phenotype data used to evaluate the performance of each method after running the example in the `run-real-data-analysis` section. The phenotype is simulated as a continuous outcome. These files will be generated automatically when running `run-real-data-analysis/process_disease_dat.R` and `run-real-data-analysis/process_continuous_dat.R` in the `Data Download and Preprocess` section. Users can directly run `bash example-evaluate-real-data-analysis.sh` to get the performance of each method using these example datasets.
+The tuning and validation data necessary for this evaluation step are generated under the folders `tuning` and `validation` when you run `run-real-data-analysis/process_disease_dat.R` and `run-real-data-analysis/process_continuous_dat.R` as described in the "Data Download and Preprocess" section.
+The `tuning` and `validation` folders as provided only contain "faux" individual-level covariate data for illustration purposes;
+these data are used for evaluating the faux data analysis results produced by the script `example-evaluate-real-data-analysis.sh` in the previous step.
+Running `bash example-evaluate-real-data-analysis.sh` evaluates the faux data analysis results.
  
  
 ## Directory Contents
