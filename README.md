@@ -34,7 +34,7 @@ For the pre-estimated LD matrices required by LDpred2 and PRS-CS, the download l
 if necessary, please refer to the corresponding methods’ websites for the latest download links.
 
 
-## Data Download and Pre-process
+## Data Download and Preprocess
 -   **Synthetic data:**  
 Download the PLINK files (`.bim`, `.bed`, `.fam`) with the prefix `EUR_`, the phenotype files named `EUR_pheno_rho*_size_4_GA_{1,4,5}`, and the GWAS summary statistics files named `EUR_summary_rho*_size_4_GA_{1,4,5}` from  [https://doi.org/10.7910/DVN/COXHAP](https://doi.org/10.7910/DVN/COXHAP).
 
@@ -109,7 +109,7 @@ These parameter choices are taken from the simulation settings of Zhang et al. (
 As with the synthetic data results, reproducing the full results here requires significant computational efforts.
 Therefore, for PRS-Bridge, PRS-CS, and its modifications, we provide bash scripts to submit the tasks to a computing cluster via `sbatch`. 
 
-1. Run the quality control step via `Rscript run-real-data-analysis/sumdat_QC.R ${TRAIT}`, where the variable `TRAIT` is as described in the "Data Download and Pre-process" section.
+1. Run the quality control step via `Rscript run-real-data-analysis/sumdat_QC.R ${TRAIT}`, where the variable `TRAIT` is as described in the "Data Download and Preprocess" section.
 The resulting files will be stored in the directory `${TRAIT}/data/`.
 2.  Run the PRS methods on the preprocessed data:
      -   Lassosum: Run `Rscript run-real-data-analysis/LASSOSUM.R ${TRAIT} ${PATH_TO_1kg} 1kg` and `Rscript run-real-data-analysis/LASSOSUM.R ${TRAIT} ${PATH_TO_UKBB} ukbb`, where `PATH_TO_1kg` and `PATH_TO_UKBB` are variables specifying the paths to the individual-level genotype data used to construct the corresponding LD reference panels. The estimated regression coefficients will be stored in the directory `${TRAIT}/LASSOSUM/`.
@@ -132,7 +132,7 @@ Finally, the results are graphically summarized via `Rscript plot-result/plot.R`
 The other figures in the main manuscript and the supplement can similarly be reproduced by running appropriate scripts under the `plot-result/` folder.
 
 **Note:** 
-The `tuning` and `validation` folders contain simulated phenotype data used to evaluate the performance of each method after running the example in the `run-real-data-analysis` section. The phenotype is simulated as a continuous outcome. These files will be generated automatically when running `run-real-data-analysis/process_disease_dat.R` and `run-real-data-analysis/process_continuous_dat.R` in the `Data Download and Pre-process` section. Users can directly run `bash example-evaluate-real-data-analysis.sh` to get the performance of each method using these example datasets.
+The `tuning` and `validation` folders contain simulated phenotype data used to evaluate the performance of each method after running the example in the `run-real-data-analysis` section. The phenotype is simulated as a continuous outcome. These files will be generated automatically when running `run-real-data-analysis/process_disease_dat.R` and `run-real-data-analysis/process_continuous_dat.R` in the `Data Download and Preprocess` section. Users can directly run `bash example-evaluate-real-data-analysis.sh` to get the performance of each method using these example datasets.
  
  
 ## Directory Contents
