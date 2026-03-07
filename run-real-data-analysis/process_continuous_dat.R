@@ -1,5 +1,5 @@
 ########## This script is used to generate continuous summary statistics from UK Biobank.
-########## Out put sumdat_Rcov.txt should have exactly same format and name as data/sumdat_Rcov.txt
+########## Out put sumdat.txt should have exactly same format and name as example/sumdat.txt
 library(dplyr)
 
 temp <- commandArgs(TRUE)

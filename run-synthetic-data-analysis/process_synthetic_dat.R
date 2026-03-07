@@ -24,6 +24,7 @@ for (chr in 1:22) {
   names(sumdat_hm3) = c(CHR, POS, SNP_ID, REF, ALT, PVAL, BETA, SE)
   sumdat_hm3$N = 100000
   sumdat_hm3$PVAL = as.numeric(sumdat_hm3$PVAL)
+  bigreadr::fwrite2(sumdat_hm3 %>% select(CHR, SNP_ID, POS, REF, ALT, BETA, SE, PVAL, N), paste0(out_dir, '/sumdat.txt'), quote = FALSE, sep = "\t", row.names = FALSE)
   sumdat_ldsc = sumdat_hm3 %>% select(SNP_ID, REF, ALT, N, PVAL, BETA) %>% 
     rename(snpid=SNP_ID, a1=REF, a2=ALT, PVAL=PVAL, beta=BETA)
   bigreadr::fwrite2(sumdat_hm3 %>% select(SNP_ID, REF, ALT, BETA, SE, N), paste0(out_dir, '/hm3_sumdat.txt'), quote = FALSE, sep = "\t", row.names = FALSE)
