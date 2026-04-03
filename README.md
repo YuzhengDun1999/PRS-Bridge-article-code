@@ -81,7 +81,7 @@ The resulting MCMC output will be stored in the file `data/coef_noconverge_pst_e
 2. Run the version of PRS-CS that uses our projection approach in place of the ad-hoc constraint via
 `python PRS-CS-proj/PRScs_proj.py --ref_dir=data/ldblk_1kg_eur --bim_prefix=data/chr22  --sst_file=data/PRScs_sumdat.txt --n_gwas=284389 --out_dir=data/coef_proj --chrom=22 --write_pst=True --phi=1e-04 --thin=1 --n_iter=800 --n_burnin=1 --seed=1 --eigenval_rm=0.2`.
 The resulting MCMC output will be stored in the file `data/coef_proj_pst_eff_a1_b0.5_phi1e-04_chr22.txt`.
-3. Plot the result via `Rscript plot-results/plot_figure1.R`.
+3. Plot the result via `Rscript plot-result/plot_fig1.R`.
 
 **Note:** 
 Under the `data` folder, we have provided a preprocessed sample dataset which can be directly used to reproduce Figure 1 following the above steps.
